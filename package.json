@@ -1,14 +1,18 @@
 {
   "name": "sih26035",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "MetroCert — Digital OIML R-76 Test, Compliance & Report platform for Non-Automatic Weighing Instruments (SIH26035)",
   "scripts": {
     "dev": "npm --prefix app run dev",
+    "dev:all": "concurrently \"npm --prefix app run dev\" \"python backend/run_server.py\"",
     "server": "python backend/run_server.py",
     "build": "npm --prefix app run build",
     "start": "npm --prefix app run start",
     "preview": "npm --prefix app run preview",
-    "test": "npm --prefix app run test"
+    "test": "npm --prefix app run test",
+    "typecheck": "npm --prefix app run typecheck",
+    "db:setup": "python scripts/setup_postgres_cluster.py",
+    "ml:train": "python scripts/train_test_suggester.py"
   }
 }

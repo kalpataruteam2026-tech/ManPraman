@@ -5,140 +5,161 @@
 **Domain:** National Regulatory & Trade Metrology / Software  
 
 [![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployment%20Ready-black?style=flat&logo=vercel)](https://vercel.com)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-14.2-black?style=flat&logo=next.js)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-18.3-61dafb?style=flat&logo=react)](https://react.dev/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791?style=flat&logo=postgresql)](https://www.postgresql.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
 [![OIML R-76](https://img.shields.io/badge/Standard-OIML%20R%2076--1%3A2006-green)](https://www.oiml.org)
 
 ---
 
 ## 📖 Overview
 
-MetroCert is an offline-first, deterministic metrological testing, compliance, and tamper-evident reporting platform for **Non-Automatic Weighing Instruments (NAWI)** conforming to **OIML R 76-1:2006**, **OIML R 76-2:2007**, and the Indian **Legal Metrology (General) Rules** (including the **Seventh Schedule** and **Fourth Amendment Rules 2026 / GSR 568(E)**).
+MetroCert is an offline-first, deterministic metrological testing, compliance verification, and tamper-evident reporting platform for **Non-Automatic Weighing Instruments (NAWI)** conforming to **OIML R 76-1:2006**, **OIML R 76-2:2007**, and the Indian **Legal Metrology (General) Rules** (including the **Seventh Schedule** and **Fourth Amendment Rules 2026 / GSR 568(E)**).
 
-### Key Features
+### Key Highlights
 - **Deterministic Metrological Engine**: Computes true indication ($P = I + 0.5d - \Delta L$), raw error ($E = P - L$), and corrected error ($E_c = E - E_0$) with complete transparent calculation traces.
 - **Dynamic MPE Tolerance Corridors**: Real-time evaluation against Accuracy Classes (Class I, II, III, IV) with visual error envelopes.
 - **2026 Standard Weight Substitution Optimizer**: Automatically evaluates repeatability ($r \le 0.2e$, $r \le 0.3e$) and advises statutory standard weight requirements ($20\%$, $33.\bar{3}\%$, or $50\% Max$).
 - **Offline-First PWA (Progressive Web App)**: Operates seamlessly in rural mandis, weighbridges, and field locations using IndexedDB with auto-sync.
 - **Tamper-Evident Reporting**: Generates standardized Field Verification and Type Approval reports with SHA-256 cryptographic fingerprints and verifiable QR codes.
-- **Role-Based Workflow**: Field Technician, Senior Reviewer, Laboratory Scientist, and Admin personas with full tamper-audit trail logging.
+- **Standardized RBAC Governance**: Strictly enforces 3 metrological roles:
+  - **Administrator** (`admin`): Full platform governance, user credential management, audit inspection.
+  - **Metrological Tester** (`tester`): Field execution, load readings capture, evidence attachment, submission.
+  - **Metrological Reviewer** (`reviewer`): Quality inspection, mathematical verification, sign-off / rejection.
 
 ---
 
-## 🚀 Vercel Deployment
+## 🏛️ Clean Repository Architecture
 
-This project is pre-configured and 100% ready for one-click deployment on **Vercel**.
+```text
+SIH26035/
+├── app/                          # Next.js 14 Frontend Web Application
+│   ├── public/                   # Static branding, symbols, PWA icons
+│   ├── src/
+│   │   ├── app/                  # Next.js App Router (Layouts, Pages, Error Boundaries)
+│   │   ├── components/           # UI components (auth, layout, ui, workflow)
+│   │   ├── domain/               # Domain models, types & OIML specifications
+│   │   ├── engine/               # Client-side metrology calculation engine
+│   │   ├── integrity/            # SHA-256 evidence hashing & cryptographic proofs
+│   │   ├── lib/                  # Utilities, formatters & backend API connectors
+│   │   ├── regulatory/           # OIML R-76 & India LM 2011 rulebooks
+│   │   ├── report/               # Client PDF, Word (.docx), QR code generators
+│   │   ├── screens/              # Core application screens
+│   │   ├── store/                # Zustand & Dexie.js offline DB
+│   │   ├── views/                # Metrology data tables & certificate previews
+│   │   └── index.css             # Tailwind design system styling
+│   ├── package.json              # Frontend dependencies
+│   ├── tsconfig.json             # TypeScript configuration
+│   └── Dockerfile                # Production multi-stage build container
+│
+├── backend/                      # Python FastAPI Metrology Engine & API
+│   ├── apps/api/                 # FastAPI routers, models, schemas, config & security
+│   ├── packages/engine/          # OIML MPE, numeric & verdict evaluator
+│   ├── packages/reportkit/       # Certified PDF, DOCX & visual chart generator
+│   ├── rulepacks/                # Statutory boundaries JSON
+│   ├── tests/                    # Acceptance & unit test suites
+│   ├── requirements.txt          # Python dependencies
+│   ├── run_server.py             # Server launcher script
+│   └── Dockerfile                # Production Python container
+│
+├── data/                         # Sample datasets & test workbooks (.xlsx, .csv)
+│   ├── multi_object_instruments_multisheet.xlsx
+│   ├── multi_object_instruments_multisheet.csv
+│   └── sample_all_17_tests_oiml_r76.csv
+│
+├── docs/                         # Official Documentation & Specifications
+│   ├── ARCHITECTURE.md           # System Architecture & Monorepo layout
+│   ├── PRD.md                    # Product Requirements Document
+│   ├── TRD.md                    # Technical Requirements Document
+│   ├── PROJECT_SPECIFICATION_OIML_R76.md
+│   ├── TECH_STACK_AND_ALGORITHMS.md
+│   ├── DESIGN_SPEC.md
+│   ├── WORKFLOW.md
+│   └── SIH26035_Problem_Statement.pdf
+│
+├── standards/                    # Statutory Metrology Reference Standards
+│   ├── acts/                     # Legal Metrology Acts, Rules & Gazette Notifications (85 PDFs)
+│   └── specifications/           # OIML R 76-1 / 76-2 official specification docs
+│
+├── scripts/                      # DevOps & Database Automation
+│   ├── setup_postgres_cluster.py # Database schema & DDL provisioner
+│   ├── generate_multi_object_files.py
+│   └── train_test_suggester.py
+│
+├── artifacts/                    # Generated test reports (.pdf, .docx)
+├── docker-compose.yml            # Full-stack local & production orchestrator
+├── package.json                  # Root monorepo workspace scripts
+├── vercel.json                   # Zero-config Vercel deployment configuration
+├── .gitignore                    # Environment & secret hygiene ignores
+└── README.md                     # Project documentation
+```
 
-### Option 1: Direct Import via GitHub (Recommended)
-1. Push this repository to your GitHub account (`https://github.com/Ajinkya00Magar/SIH26035.git`).
-2. Go to [Vercel Dashboard](https://vercel.com/dashboard) and click **"Add New Project"**.
-3. Import the `SIH26035` repository.
-4. **Deploy as-is** (Vercel will automatically read the root [`vercel.json`](./vercel.json) and build `app/`):
-   - **Framework Preset**: `Next.js`
-   - **Build Command**: `cd app && npm install && npm run build`
-5. Click **Deploy**. Your app will be live with Next.js App Router routing supported!
+---
+
+## 🚀 Deployment Guide
+
+### Option 1: Vercel (Zero-Config Frontend)
+1. Push this repository to GitHub (`https://github.com/Ajinkya00Magar/SIH26035.git`).
+2. Open your [Vercel Dashboard](https://vercel.com/dashboard) and import the repository.
+3. Vercel automatically detects [`vercel.json`](./vercel.json) and builds the Next.js frontend with 0 configuration.
+
+### Option 2: Docker Compose (Full Stack with 1 Command)
+Run PostgreSQL, FastAPI Backend, and Next.js Frontend together:
+```bash
+docker compose up -d --build
+```
+- **Frontend App**: `http://localhost:3000`
+- **FastAPI Documentation**: `http://localhost:8000/docs`
+- **PostgreSQL Database**: `localhost:5432`
 
 ---
 
 ## 💻 Local Development
 
 ### Prerequisites
-- Node.js >= 18.x
-- npm >= 9.x
+- **Node.js** >= 18.x
+- **Python** >= 3.10
+- **npm** >= 9.x
 
-### Quick Start
-```bash
-# Clone the repository
-git clone https://github.com/Ajinkya00Magar/SIH26035.git
-cd SIH26035
+### Quickstart
 
-# Install dependencies and start local dev server
-npm install --prefix app
-npm run dev
+1. **Install Frontend Dependencies:**
+   ```bash
+   npm --prefix app install
+   ```
 
-# Or directly in the app directory:
-cd app
-npm install
-npm run dev
-```
+2. **Install Backend Dependencies:**
+   ```bash
+   pip install -r backend/requirements.txt
+   ```
 
-### Available Scripts
-```bash
-npm run dev      # Start local Next.js development server (default: port 3000)
-npm run build    # Production Next.js build
-npm run start    # Start Next.js production server
-npm test         # Run the 39 unit tests (Vitest)
-```
+3. **Start Development Servers:**
+   - **Frontend**:
+     ```bash
+     npm run dev
+     ```
+     Accessible at [http://localhost:3000](http://localhost:3000)
 
----
+   - **Backend API**:
+     ```bash
+     npm run server
+     ```
+     API docs at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
-## 🏛️ Project Structure
-
-```
-SIH26035/
-├── app/                              # Production React + TypeScript PWA
-│   ├── src/
-│   │   ├── components/               # UI components, layout, navigation, charts
-│   │   ├── engine/                   # Metrology, MPE & compliance calculation engine
-│   │   ├── pages/                    # Route pages (Dashboard, Sessions, Reports, Verify, etc.)
-│   │   ├── regulatory/               # OIML R-76 & Legal Metrology statutory rulesets
-│   │   ├── report/                   # PDF generation (jsPDF, autoTable), QR code & JSON export
-│   │   ├── store/                    # Dexie (IndexedDB) offline store & Zustand state
-│   │   └── types/                    # Metrological data contracts and schemas
-│   ├── package.json                  # App dependencies
-│   ├── vite.config.ts                # Vite & PWA configuration
-│   └── vercel.json                   # Subdirectory SPA routing configuration
-├── docs/                             # Technical design specifications
-│   └── DESIGN_SPEC.md                # 18-part full design specification
-├── Instruments_tests_details/        # Reference OIML standards (R 76-1, R 76-2)
-├── OIML/                             # Indian Legal Metrology gazette notifications (2011–2026)
-├── PRD.md                            # Product Requirements Document
-├── TRD.md                            # Technical Requirements Document
-├── PROJECT_SPECIFICATION_OIML_R76.md # OIML R-76 metrological rules & evolution roadmap
-├── package.json                      # Root proxy scripts
-├── vercel.json                       # Root Vercel deployment configuration
-└── README.md                         # Project documentation
-```
+4. **Run Verification & Tests:**
+   ```bash
+   npm run build     # Verify full Next.js static page production build
+   npm run test      # Run unit test suite
+   npm run typecheck # Run TypeScript compiler verification
+   ```
 
 ---
 
-## 🧪 Testing & Verification
+## 👥 Demo Credentials
 
-Run the test suite covering metrological formulas, MPE band evaluations, compliance logic, and seed data:
-
-```bash
-npm test
-```
-
-All 39 unit tests execute deterministically against OIML R-76 tolerances:
-- Zero setting & zero tracking formulas ($P = I + 0.5d - \Delta L$)
-- Eccentricity (corner load) error limits
-- Weighing performance (increasing & decreasing)
-- In-service vs initial verification MPE multipliers ($2 \times$)
-- 2026 GSR 568(E) substitution threshold reduction ($0.2e / 0.3e$)
-
----
-
-## 📜 Regulatory Standards & Acts
-
-- **OIML R 76-1:2006**: Non-automatic weighing instruments — Part 1: Metrological and technical requirements
-- **OIML R 76-2:2007**: Non-automatic weighing instruments — Part 2: Test report format
-- **The Legal Metrology Act, 2009** (Act No. 1 of 2010)
-- **Legal Metrology (General) Rules, 2011** — Seventh Schedule (Heading A)
-- **Legal Metrology (General) Fourth Amendment Rules, 2026** (G.S.R. 568(E))
-. Administrator Role
-
-Email: admin@metrocert.gov.in
-Password: password123
-Access Level: Full access to all features, including system configuration, session management, and report generation.
-2. Technician Role
-
-Email: tech@metrocert.gov.in
-Password: password123
-Access Level: Can create and perform new test sessions, record results, and view test data.
-3. Reviewer Role
-
-Email: reviewer@metrocert.gov.in
-Password: password123
-Access Level: Can review submitted test sessions and generate official PDF/Word reports, but cannot create new tests.
+| Role | Email | Password | Scope |
+| :--- | :--- | :--- | :--- |
+| **Administrator** | `admin@metrocert.gov.in` | `password123` | Full administrative control, user governance, audit trail |
+| **Tester** | `tech@metrocert.gov.in` | `password123` | Instrument test execution, observation logging, submission |
+| **Reviewer** | `reviewer@metrocert.gov.in` | `password123` | Quality audit, calculation verification, certificate approval |
