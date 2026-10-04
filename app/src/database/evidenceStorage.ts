@@ -118,9 +118,9 @@ export async function uploadEvidenceToStorage(
     fileName: file.name,
     fileSize: file.size,
     mimeType: file.type || 'image/jpeg',
-    dataUrl: storageUrl || dataUrl,
-    storagePath,
-    storageUrl,
+    dataUrl: dataUrl, // ALWAYS keep base64 Data URL so local viewing and PDF generation always work 100% offline!
+    storagePath: storagePath || undefined,
+    storageUrl: storageUrl || undefined,
     sha256,
     orderIndex: params.orderIndex ?? 0,
     createdAt: now,
@@ -175,9 +175,9 @@ export async function replaceEvidenceFileInStorage(
     fileName: newFile.name,
     fileSize: newFile.size,
     mimeType: newFile.type || 'image/jpeg',
-    dataUrl: storageUrl || dataUrl,
-    storagePath,
-    storageUrl,
+    dataUrl: dataUrl,
+    storagePath: storagePath || undefined,
+    storageUrl: storageUrl || undefined,
     sha256,
   };
 

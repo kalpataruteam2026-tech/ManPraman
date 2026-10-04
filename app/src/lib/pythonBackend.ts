@@ -95,10 +95,46 @@ export async function generateOimlReportDocument(
   format: 'pdf' | 'docx' = 'pdf',
   payloadExtra?: { session_data?: any; instrument_data?: any; evidence?: any[] }
 ) {
+  // Automatically pull evidence from app store if not explicitly passed
+  let evidenceList = payloadExtra?.evidence;
+  if (!evidenceList || evidenceList.length === 0) {
+    try {
+      const { useAppStore } = await import('../store/useAppStore');
+      const allEv = useAppStore.getState().evidence || [];
+      const sessId = payloadExtra?.session_data?.id || reportId;
+      const matched = allEv.filter((e) => e.sessionId === sessId || e.sessionId === reportId);
+      evidenceList = matched.length > 0 ? matched : allEv;
+    } catch {
+      // fallback
+    }
+  }
+
+  // Deduplicate and ensure clean evidence array
+  const cleanEvidence: any[] = [];
+  if (Array.isArray(evidenceList)) {
+    const seen = new Set<string>();
+    for (const item of evidenceList) {
+      if (item && (item.id || item.fileName || item.dataUrl)) {
+        const k = item.id || `${item.fileName}_${item.createdAt}`;
+        if (!seen.has(k)) {
+          seen.add(k);
+          cleanEvidence.push(item);
+        }
+      }
+    }
+  }
+
+  const finalPayload = {
+    kind,
+    format,
+    ...payloadExtra,
+    evidence: cleanEvidence,
+  };
+
   const res = await fetch(`${API_BASE}/reports/${reportId}/generate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ kind, format, ...payloadExtra }),
+    body: JSON.stringify(finalPayload),
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));

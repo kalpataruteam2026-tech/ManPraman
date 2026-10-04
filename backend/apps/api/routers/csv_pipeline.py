@@ -377,6 +377,7 @@ def process_csv_content(csv_text: str, db: Session) -> Dict[str, Any]:
             result=verdict
         ))
 
+    overall_verdict = "failed" if any(v == "failed" for v in all_verdicts) else "passed"
     rep.verdict = overall_verdict
     rep.progress_pct = 100.0
     db.commit()

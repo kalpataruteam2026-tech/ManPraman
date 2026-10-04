@@ -801,12 +801,16 @@ export async function processSingleCsvContent(
 
   // 5. Synchronize with Python Backend via /csv/import-raw so SQLite has the report
   try {
-    const backendRes = await fetch('http://127.0.0.1:8000/csv/import-raw', {
+    const backendRes = await fetch('/api/backend/csv/import-raw', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ csv: text }),
-    });
-    if (backendRes.ok) {
+    }).catch(() => fetch('http://127.0.0.1:8000/csv/import-raw', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ csv: text }),
+    }));
+    if (backendRes && backendRes.ok) {
       const bData = await backendRes.json();
       console.info('Backend SQLite database synced with CSV:', bData);
     }

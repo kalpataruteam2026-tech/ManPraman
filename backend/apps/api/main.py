@@ -48,7 +48,15 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)
 # Enable CORS for local and web SPA usage
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+    ],
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -64,6 +72,7 @@ app.include_router(tests.router, prefix=api_v1_prefix)
 app.include_router(checklist.router, prefix=api_v1_prefix)
 app.include_router(equipment.router, prefix=api_v1_prefix)
 app.include_router(generation.router, prefix=api_v1_prefix)
+app.include_router(generation.router)
 app.include_router(dashboard.router, prefix=api_v1_prefix)
 app.include_router(ml_pipeline.router, prefix=api_v1_prefix)
 app.include_router(csv_pipeline.router, prefix=api_v1_prefix)

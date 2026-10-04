@@ -479,9 +479,11 @@ export default function Review() {
     setLoadingBackendPdf(true);
     try {
       const reportId = backendReport?.id || id || 'rep_demo_01';
+      const storeEv = useAppStore.getState().evidence.filter((e) => e.sessionId === id || e.sessionId === localSession?.id);
       const res = await generateOimlReportDocument(reportId, 'detailed', 'pdf', {
         session_data: localSession,
         instrument_data: localInstrument,
+        evidence: storeEv,
       });
       const rawUrl = res.download_url
         ? (res.download_url.startsWith('http') ? res.download_url : `http://127.0.0.1:8000${res.download_url}`)
@@ -540,11 +542,13 @@ export default function Review() {
   // Generate & export report (PDF / Word)
   async function handleExportReport(kind: 'detailed' | 'summary', format: 'pdf' | 'docx') {
     const reportId = backendReport?.id || id || 'rep_demo_01';
+    const storeEv = useAppStore.getState().evidence.filter((e) => e.sessionId === id || e.sessionId === localSession?.id);
     setGenerating(true);
     try {
       const res = await generateOimlReportDocument(reportId, kind, format, {
         session_data: localSession,
         instrument_data: localInstrument,
+        evidence: storeEv,
       });
       const downloadUrl = res.download_url
         ? (res.download_url.startsWith('http') ? res.download_url : `http://127.0.0.1:8000${res.download_url}`)
