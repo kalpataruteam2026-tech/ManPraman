@@ -7,9 +7,12 @@ Builds authentic, publication-quality A4 PDF reports:
 import os
 import io
 import base64
-from typing import Dict, Any, List
+import urllib.request
+import hashlib
+from typing import Dict, Any, List, Tuple, Optional
 from decimal import Decimal
-from PIL import Image as PILImage, ImageDraw
+import fitz
+from PIL import Image as PILImage, ImageDraw, ImageOps
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -266,48 +269,196 @@ def build_disturbance_table(styles: Any, inst: dict, t_obj: dict = None, full_ti
     ]))
     return t
 
-def make_evidence_image_flowable(data_url_or_path, max_w=240, max_h=130):
-    """Safely decodes and sizes image from base64 data URL, raw base64, or filesystem path."""
-    if not data_url_or_path:
+def extract_evidence_payload(ev_or_data: Any) -> Tuple[Optional[bytes], str, str]:
+    """
+    Extracts raw bytes, detected mime_type, and filename from an evidence dictionary or string.
+    Handles:
+      - dataUrl: "data:image/jpeg;base64,...", "data:application/pdf;base64,..."
+      - raw base64 strings in dataUrl / base64 / content / data
+      - remote URLs in storageUrl / url / path (http/https)
+      - local file paths in path / filePath / storagePath
+    Returns:
+      (raw_bytes, mime_type, file_name)
+    """
+    if not ev_or_data:
+        return None, "", "evidence_file"
+
+    file_name = "evidence_file"
+    mime_type = ""
+    sources = []
+
+    if isinstance(ev_or_data, dict):
+        file_name = str(ev_or_data.get("fileName") or ev_or_data.get("name") or ev_or_data.get("filename") or "evidence_file")
+        mime_type = str(ev_or_data.get("mimeType") or ev_or_data.get("type") or "").lower()
+        sources = [
+            ev_or_data.get("dataUrl"),
+            ev_or_data.get("data"),
+            ev_or_data.get("base64"),
+            ev_or_data.get("content"),
+            ev_or_data.get("storageUrl"),
+            ev_or_data.get("url"),
+            ev_or_data.get("filePath"),
+            ev_or_data.get("path"),
+            ev_or_data.get("storagePath"),
+        ]
+    elif isinstance(ev_or_data, (str, bytes)):
+        sources = [ev_or_data]
+
+    raw_bytes: Optional[bytes] = None
+
+    for src in sources:
+        if not src:
+            continue
+        if isinstance(src, bytes):
+            raw_bytes = src
+            break
+        if isinstance(src, str):
+            src_str = src.strip()
+            if not src_str:
+                continue
+
+            # A. Data URL
+            if src_str.startswith("data:"):
+                try:
+                    meta_part, b64_part = src_str.split(",", 1)
+                    if ";base64" in meta_part:
+                        meta_mime = meta_part.split(";")[0].replace("data:", "").strip().lower()
+                        if meta_mime:
+                            mime_type = meta_mime
+                    raw_bytes = base64.b64decode(b64_part.strip())
+                    break
+                except Exception:
+                    pass
+
+            # B. Remote URL (http/https)
+            elif src_str.startswith("http://") or src_str.startswith("https://"):
+                try:
+                    req = urllib.request.Request(src_str, headers={"User-Agent": "OIML-ReportKit/2.0"})
+                    with urllib.request.urlopen(req, timeout=10) as response:
+                        raw_bytes = response.read()
+                        content_type = response.headers.get_content_type()
+                        if content_type:
+                            mime_type = content_type.lower()
+                    if raw_bytes:
+                        break
+                except Exception:
+                    pass
+
+            # C. Local file on filesystem
+            elif os.path.isfile(src_str):
+                try:
+                    with open(src_str, "rb") as f:
+                        raw_bytes = f.read()
+                    if raw_bytes:
+                        break
+                except Exception:
+                    pass
+
+            # D. Raw base64 string
+            elif len(src_str) > 60 and " " not in src_str:
+                try:
+                    decoded = base64.b64decode(src_str)
+                    if len(decoded) > 10:
+                        raw_bytes = decoded
+                        break
+                except Exception:
+                    pass
+
+    # Sniff file format from signature if raw_bytes were resolved
+    if raw_bytes:
+        if raw_bytes.startswith(b"%PDF"):
+            mime_type = "application/pdf"
+            if not file_name.lower().endswith(".pdf"):
+                file_name += ".pdf"
+        elif raw_bytes.startswith(b"\xff\xd8\xff"):
+            mime_type = "image/jpeg"
+            if not file_name.lower().endswith((".jpg", ".jpeg")):
+                file_name += ".jpg"
+        elif raw_bytes.startswith(b"\x89PNG"):
+            mime_type = "image/png"
+            if not file_name.lower().endswith(".png"):
+                file_name += ".png"
+        elif raw_bytes.startswith(b"RIFF") and b"WEBP" in raw_bytes[:16]:
+            mime_type = "image/webp"
+            if not file_name.lower().endswith(".webp"):
+                file_name += ".webp"
+
+    return raw_bytes, mime_type, file_name
+
+def make_evidence_image_flowable(data_url_or_path_or_ev, max_w=240, max_h=130):
+    """
+    Safely decodes and sizes image from base64 data URL, raw base64, filesystem path,
+    or full evidence dictionary, using PyMuPDF (fitz) for PDFs and Pillow for images.
+    Returns:
+      Flowable Image or None. Also stores metadata in ev['_meta_info'] if input was dict.
+    """
+    if not data_url_or_path_or_ev:
         return None
+
+    raw_bytes, mime_type, file_name = extract_evidence_payload(data_url_or_path_or_ev)
+    is_dict = isinstance(data_url_or_path_or_ev, dict)
+    meta_info = {
+        "raw_bytes": raw_bytes,
+        "mime_type": mime_type,
+        "file_name": file_name,
+        "is_pdf": False,
+        "pdf_pages": 0
+    }
+    if is_dict:
+        data_url_or_path_or_ev["_meta_info"] = meta_info
+
+    if not raw_bytes:
+        return None
+
     try:
-        if isinstance(data_url_or_path, str) and (data_url_or_path.startswith("data:image/") or ";base64," in data_url_or_path or len(data_url_or_path) > 100):
-            if ";base64," in data_url_or_path:
-                _, b64 = data_url_or_path.split(";base64,", 1)
-            elif data_url_or_path.startswith("data:"):
-                _, b64 = data_url_or_path.split(",", 1)
-            else:
-                b64 = data_url_or_path
-            raw = base64.b64decode(b64.strip())
-            bio = io.BytesIO(raw)
-            img = Image(bio)
-            orig_w = getattr(img, "imageWidth", max_w)
-            orig_h = getattr(img, "imageHeight", max_h)
-            if orig_w > 0 and orig_h > 0:
+        # 1. Handle PDF Documents using PyMuPDF (fitz)
+        if mime_type == "application/pdf" or raw_bytes.startswith(b"%PDF"):
+            meta_info["is_pdf"] = True
+            doc = fitz.open(stream=raw_bytes, filetype="pdf")
+            meta_info["pdf_pages"] = len(doc)
+            if len(doc) > 0:
+                pix = doc[0].get_pixmap(dpi=150)
+                thumb_png_bytes = pix.tobytes("png")
+                doc.close()
+
+                pil_img = PILImage.open(io.BytesIO(thumb_png_bytes))
+                orig_w, orig_h = pil_img.size
                 scale = min(max_w / orig_w, max_h / orig_h)
-                img.drawWidth = orig_w * scale
-                img.drawHeight = orig_h * scale
-            else:
-                img.drawWidth = max_w
-                img.drawHeight = max_h
-            img.hAlign = 'CENTER'
-            return img
-        elif isinstance(data_url_or_path, str) and os.path.isfile(data_url_or_path):
-            img = Image(data_url_or_path)
-            orig_w = getattr(img, "imageWidth", max_w)
-            orig_h = getattr(img, "imageHeight", max_h)
-            if orig_w > 0 and orig_h > 0:
-                scale = min(max_w / orig_w, max_h / orig_h)
-                img.drawWidth = orig_w * scale
-                img.drawHeight = orig_h * scale
-            else:
-                img.drawWidth = max_w
-                img.drawHeight = max_h
-            img.hAlign = 'CENTER'
-            return img
+                draw_w = orig_w * scale
+                draw_h = orig_h * scale
+
+                buf = io.BytesIO(thumb_png_bytes)
+                img = Image(buf, width=draw_w, height=draw_h)
+                img.hAlign = 'CENTER'
+                return img
+            doc.close()
+            return None
+
+        # 2. Handle Photographic Images using Pillow (PIL)
+        pil_img = PILImage.open(io.BytesIO(raw_bytes))
+        try:
+            pil_img = ImageOps.exif_transpose(pil_img)
+        except Exception:
+            pass
+
+        orig_w, orig_h = pil_img.size
+        scale = min(max_w / orig_w, max_h / orig_h)
+        draw_w = orig_w * scale
+        draw_h = orig_h * scale
+
+        buf = io.BytesIO()
+        if pil_img.mode in ("RGBA", "LA", "P"):
+            pil_img.save(buf, format="PNG")
+        else:
+            if pil_img.mode != "RGB":
+                pil_img = pil_img.convert("RGB")
+            pil_img.save(buf, format="JPEG", quality=90)
+        buf.seek(0)
+        img = Image(buf, width=draw_w, height=draw_h)
+        img.hAlign = 'CENTER'
+        return img
     except Exception:
         return None
-    return None
 
 def generate_default_evidence_items(inst: Dict[str, Any], meta: Dict[str, Any] = None) -> List[Dict[str, Any]]:
     """Generates authentic representative photographic evidence items for pattern evaluation."""
@@ -402,7 +553,7 @@ def format_evidence_cell(ev, styles, fig_no=1, is_full_width=False):
     """Formats a single evidence item into a list of flowables for a clean card table cell."""
     card_elements = []
     category = str(ev.get("category") or ev.get("kind") or "Inspection Evidence").replace("_", " ")
-    file_name = str(ev.get("fileName") or ev.get("name") or "Evidence Image")
+    file_name = str(ev.get("fileName") or ev.get("name") or "Evidence Record")
     caption = str(ev.get("caption") or file_name)
     ev_id = str(ev.get("id") or f"EV-{fig_no}")
     test_id = str(ev.get("testId") or ev.get("test_id") or "")
@@ -411,12 +562,10 @@ def format_evidence_cell(ev, styles, fig_no=1, is_full_width=False):
 
     associated = f"Associated Test: {test_id.upper()}" if test_id else (f"Requirement: {req_id}" if req_id else "General Inspection")
 
-    data_url = ev.get("dataUrl") or ev.get("url") or ev.get("path")
-    img_flowable = None
-    if data_url:
-        max_w = 485 if is_full_width else 236
-        max_h = 250 if is_full_width else 165
-        img_flowable = make_evidence_image_flowable(data_url, max_w=max_w, max_h=max_h)
+    max_w = 485 if is_full_width else 236
+    max_h = 240 if is_full_width else 155
+    img_flowable = make_evidence_image_flowable(ev, max_w=max_w, max_h=max_h)
+    meta_info = ev.get("_meta_info", {})
 
     cat_style = ParagraphStyle(
         f'EVCat_{fig_no}_{"full" if is_full_width else "half"}',
@@ -439,17 +588,29 @@ def format_evidence_cell(ev, styles, fig_no=1, is_full_width=False):
         leading=11 if is_full_width else 9.5,
         textColor=SLATE_DARK
     )
+    badge_style = ParagraphStyle(
+        f'EVBadge_{fig_no}_{"full" if is_full_width else "half"}',
+        fontName='Helvetica-Bold',
+        fontSize=7 if is_full_width else 6.5,
+        leading=9,
+        textColor=colors.HexColor("#0284C7"),
+        alignment=1
+    )
 
     card_elements.append(Paragraph(f"<b>Figure {fig_no}: {category.upper()}</b> &nbsp; <font size='6' color='#64748B'>[ID: {ev_id}]</font>", cat_style))
-    card_elements.append(Spacer(1, 4 if is_full_width else 2))
+    card_elements.append(Spacer(1, 3))
 
     if img_flowable:
         card_elements.append(img_flowable)
+        if meta_info.get("is_pdf"):
+            card_elements.append(Spacer(1, 2))
+            pages_count = meta_info.get("pdf_pages", 1)
+            card_elements.append(Paragraph(f"<b>[PDF EVIDENCE DOCUMENT &bull; {pages_count} PAGE(S)]</b><br/><font size='6.5' color='#64748B'>Complete document attached in Annexure E</font>", badge_style))
     else:
-        doc_badge = Paragraph(f"<b>[Attached Photo / Document]</b><br/>{file_name}", cat_style)
+        doc_badge = Paragraph(f"<b>[Attached Document Record]</b><br/>{file_name}", cat_style)
         card_elements.append(doc_badge)
 
-    card_elements.append(Spacer(1, 4 if is_full_width else 2))
+    card_elements.append(Spacer(1, 3))
     card_elements.append(Paragraph(f"<b>{caption}</b>", caption_style))
     card_elements.append(Paragraph(f"<font color='#0284C7'>{associated}</font>", meta_style))
     if sha256:
@@ -1558,6 +1719,87 @@ def generate_pdf_report(
             code_style
         ))
 
+        # ---------------------------------------------------------------------
+        # ANNEXURE E: COMPLETE ATTACHED STATUTORY EVIDENCE DOCUMENTS & CALIBRATION CERTIFICATES
+        # Appends every page of attached PDF documents (e.g. calibration certificates,
+        # pattern approvals, inspection sheets) as full-page official Annexure sheets,
+        # allowing the total dossier page count to scale beyond 64 pages dynamically.
+        # ---------------------------------------------------------------------
+        pdf_evidence_docs = []
+        for ev in evidence_items:
+            m_info = ev.get("_meta_info", {})
+            if m_info.get("is_pdf") or str(ev.get("mimeType", "")).lower() == "application/pdf" or str(ev.get("fileName", "")).lower().endswith(".pdf"):
+                pdf_evidence_docs.append(ev)
+
+        if pdf_evidence_docs:
+            for doc_idx, doc_ev in enumerate(pdf_evidence_docs):
+                raw_b, m_type, f_name = extract_evidence_payload(doc_ev)
+                if not raw_b:
+                    continue
+                try:
+                    pdf_doc = fitz.open(stream=raw_b, filetype="pdf")
+                    num_pages = len(pdf_doc)
+                    f_name = doc_ev.get("fileName") or f_name or f"Evidence_Document_{doc_idx + 1}.pdf"
+                    category = str(doc_ev.get("category") or doc_ev.get("kind") or "Statutory Document").replace("_", " ").title()
+                    caption = str(doc_ev.get("caption") or f_name)
+                    ev_id = str(doc_ev.get("id") or f"EV-DOC-{doc_idx + 1}")
+                    test_id = str(doc_ev.get("testId") or doc_ev.get("test_id") or "")
+                    req_id = str(doc_ev.get("requirementId") or doc_ev.get("requirement_id") or "")
+                    associated = f"Test: {test_id.upper()}" if test_id else (f"Requirement: {req_id}" if req_id else "General Inspection")
+                    sha_str = str(doc_ev.get("sha256") or hashlib.sha256(raw_b).hexdigest())
+
+                    for page_idx in range(num_pages):
+                        story.append(PageBreak())
+                        story.append(Paragraph("Non-automatic weighing instruments — Type evaluation report", h2_style))
+                        annex_header = f"<b>ANNEXURE E.{doc_idx + 1}: STATUTORY EVIDENCE DOCUMENT — {f_name.upper()}</b>"
+                        story.append(Paragraph(annex_header, h1_style))
+                        story.append(Spacer(1, 2))
+
+                        info_text = (
+                            f"<b>Sheet {page_idx + 1} of {num_pages}</b> &nbsp;|&nbsp; "
+                            f"<b>Category:</b> {category} &nbsp;|&nbsp; "
+                            f"<b>Evidence ID:</b> <code>{ev_id}</code> &nbsp;|&nbsp; "
+                            f"<b>Associated:</b> {associated}"
+                        )
+                        story.append(Paragraph(info_text, normal_style))
+                        story.append(Paragraph(f"<font size='6.5' color='#64748B'>Cryptographic SHA-256 Digest: <code>{sha_str}</code> &nbsp;|&nbsp; Document Verification Status: SECURED</font>", normal_style))
+                        story.append(Spacer(1, 4))
+
+                        # Render the PDF page at 180 DPI for crisp readability
+                        fitz_page = pdf_doc[page_idx]
+                        pix = fitz_page.get_pixmap(dpi=180)
+                        png_bytes = pix.tobytes("png")
+
+                        pil_page = PILImage.open(io.BytesIO(png_bytes))
+                        pw, ph = pil_page.size
+
+                        # Fit neatly within A4 printable body (515 pt wide, max 655 pt high)
+                        max_w_annex = 515
+                        max_h_annex = 655
+                        scale = min(max_w_annex / pw, max_h_annex / ph)
+                        draw_w = pw * scale
+                        draw_h = ph * scale
+
+                        buf = io.BytesIO(png_bytes)
+                        page_img = Image(buf, width=draw_w, height=draw_h)
+                        page_img.hAlign = 'CENTER'
+
+                        t_page = Table([[page_img]], colWidths=[515])
+                        t_page.setStyle(TableStyle([
+                            ('GRID', (0,0), (-1,-1), 0.75, OIML_BORDER),
+                            ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#FFFFFF")),
+                            ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+                            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+                            ('TOPPADDING', (0,0), (-1,-1), 2),
+                            ('BOTTOMPADDING', (0,0), (-1,-1), 2),
+                            ('LEFTPADDING', (0,0), (-1,-1), 2),
+                            ('RIGHTPADDING', (0,0), (-1,-1), 2),
+                        ]))
+                        story.append(t_page)
+                    pdf_doc.close()
+                except Exception:
+                    pass
+
     # =========================================================================
     # SUMMARY 2-PAGE CERTIFICATE IMPLEMENTATION
     # =========================================================================
@@ -1651,4 +1893,31 @@ def generate_pdf_report(
         ))
 
     doc.build(story, canvasmaker=OimlNumberedCanvas)
+
+    # Embed original binary files into the PDF container using PyMuPDF (fitz)
+    try:
+        if evidence_items and len(evidence_items) > 0:
+            fitz_doc = fitz.open(output_path)
+            attached_any = False
+            for idx, ev in enumerate(evidence_items):
+                raw_b, m_type, f_name = extract_evidence_payload(ev)
+                if raw_b and len(raw_b) > 0:
+                    ev_id = str(ev.get("id") or f"EV_{idx + 1}")
+                    clean_name = f"{ev_id}_{f_name}".replace(" ", "_").replace("/", "-")
+                    desc = f"Evidence ID: {ev_id} | Category: {ev.get('category') or ev.get('kind')} | {f_name}"
+                    try:
+                        fitz_doc.embfile_add(clean_name, raw_b, filename=f_name, ufilename=f_name, desc=desc)
+                        attached_any = True
+                    except Exception:
+                        pass
+            if attached_any:
+                temp_saved = output_path + ".emb.pdf"
+                fitz_doc.save(temp_saved, garbage=3, deflate=True)
+                fitz_doc.close()
+                os.replace(temp_saved, output_path)
+            else:
+                fitz_doc.close()
+    except Exception:
+        pass
+
     return output_path

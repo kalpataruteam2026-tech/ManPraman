@@ -10,6 +10,8 @@ import io
 import base64
 import hashlib
 from typing import Dict, Any, List
+import fitz
+from PIL import Image as PILImage, ImageOps
 from docx import Document
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -21,6 +23,7 @@ from .diagrams import (
     generate_eccentricity_sketch,
     generate_rolling_load_sketch
 )
+from .pdf_generator import extract_evidence_payload
 
 def set_cell_shading(cell, color_hex: str):
     """Set cell background color."""
@@ -427,18 +430,35 @@ def generate_docx_report(
             set_cell_margins(c_body, 40, 40, 60, 60)
             p_body = c_body.paragraphs[0]
 
-            data_url = ev.get("dataUrl") or ev.get("url") or ev.get("path")
+            raw_bytes, mime_type, f_name = extract_evidence_payload(ev)
             img_added = False
-            if data_url and isinstance(data_url, str):
+            if raw_bytes and len(raw_bytes) > 0:
                 try:
-                    if data_url.startswith("data:image/") or ";base64," in data_url:
-                        header, b64 = data_url.split(";base64,", 1) if ";base64," in data_url else ("", data_url)
-                        raw = base64.b64decode(b64.strip())
-                        bio = io.BytesIO(raw)
-                        p_body.add_run().add_picture(bio, width=Inches(4.5))
-                        img_added = True
-                    elif os.path.isfile(data_url):
-                        p_body.add_run().add_picture(data_url, width=Inches(4.5))
+                    if mime_type == "application/pdf" or raw_bytes.startswith(b"%PDF"):
+                        doc_fitz = fitz.open(stream=raw_bytes, filetype="pdf")
+                        if len(doc_fitz) > 0:
+                            pix = doc_fitz[0].get_pixmap(dpi=150)
+                            png_b = pix.tobytes("png")
+                            p_body.add_run().add_picture(io.BytesIO(png_b), width=Inches(4.5))
+                            p_pdf_badge = c_body.add_paragraph()
+                            r_badge = p_pdf_badge.add_run(f"[PDF Document • {len(doc_fitz)} Pages — See Annexure E for complete document]")
+                            r_badge.font.size = Pt(8)
+                            r_badge.font.bold = True
+                            r_badge.font.color.rgb = RGBColor(2, 132, 199)
+                            img_added = True
+                        doc_fitz.close()
+                    else:
+                        pil_img = PILImage.open(io.BytesIO(raw_bytes))
+                        try:
+                            pil_img = ImageOps.exif_transpose(pil_img)
+                        except Exception:
+                            pass
+                        buf = io.BytesIO()
+                        if pil_img.mode != "RGB":
+                            pil_img = pil_img.convert("RGB")
+                        pil_img.save(buf, format="JPEG", quality=90)
+                        buf.seek(0)
+                        p_body.add_run().add_picture(buf, width=Inches(4.5))
                         img_added = True
                 except Exception:
                     pass
@@ -841,6 +861,42 @@ def generate_docx_report(
         "\nStatutory Notice: Any reproduction of this document other than in full requires written authorization "
         "from the issuing metrology authority. Test results relate exclusively to the identified instrument under test."
     )
+
+    # -------------------------------------------------------------------------
+    # ANNEXURE E: COMPLETE ATTACHED STATUTORY EVIDENCE DOCUMENTS & CALIBRATION CERTIFICATES
+    # -------------------------------------------------------------------------
+    pdf_evidence_docs = [
+        ev for ev in evidence_items
+        if str(ev.get("mimeType", "")).lower() == "application/pdf"
+        or str(ev.get("fileName", "")).lower().endswith(".pdf")
+        or (isinstance(ev.get("dataUrl"), str) and "data:application/pdf" in ev["dataUrl"])
+    ]
+    if pdf_evidence_docs:
+        for doc_idx, doc_ev in enumerate(pdf_evidence_docs):
+            raw_b, m_type, f_name = extract_evidence_payload(doc_ev)
+            if not raw_b:
+                continue
+            try:
+                pdf_doc = fitz.open(stream=raw_b, filetype="pdf")
+                num_pages = len(pdf_doc)
+                doc_title = str(doc_ev.get("fileName") or f_name or f"Evidence_Doc_{doc_idx+1}.pdf")
+                for page_idx in range(num_pages):
+                    doc.add_page_break()
+                    doc.add_heading(f"Annexure E.{doc_idx+1} — {doc_title} (Sheet {page_idx+1} of {num_pages})", level=2)
+                    p_doc_meta = doc.add_paragraph()
+                    r_dm = p_doc_meta.add_run(f"Statutory Evidence Document | Associated: {doc_ev.get('testId') or doc_ev.get('requirementId') or 'General Inspection'}")
+                    r_dm.font.size = Pt(8.5)
+                    r_dm.font.italic = True
+                    r_dm.font.color.rgb = RGBColor(100, 116, 139)
+
+                    pix = pdf_doc[page_idx].get_pixmap(dpi=180)
+                    png_b = pix.tobytes("png")
+                    p_img = doc.add_paragraph()
+                    p_img.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                    p_img.add_run().add_picture(io.BytesIO(png_b), width=Inches(6.0))
+                pdf_doc.close()
+            except Exception:
+                pass
 
     doc.save(output_path)
     return output_path

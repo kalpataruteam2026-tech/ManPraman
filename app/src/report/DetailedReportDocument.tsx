@@ -121,6 +121,14 @@ export function DetailedReportDocument({ report, qr }: { report: Report; qr?: st
                   alt={lightboxItem.caption || 'Evidence'}
                   className="max-h-[65vh] max-w-full object-contain rounded-lg border border-slate-700 shadow-lg"
                 />
+              ) : lightboxItem.dataUrl && (lightboxItem.dataUrl.startsWith('data:application/pdf') || lightboxItem.fileName?.toLowerCase().endsWith('.pdf')) ? (
+                <div className="w-full h-[65vh] flex flex-col rounded-lg overflow-hidden border border-slate-700 bg-slate-900">
+                  <iframe
+                    src={lightboxItem.dataUrl}
+                    title={lightboxItem.fileName || 'PDF Document'}
+                    className="w-full h-full border-0 rounded-lg"
+                  />
+                </div>
               ) : (
                 <div className="text-center p-8 text-slate-400">
                   <FileText className="h-16 w-16 mx-auto mb-3 text-slate-600" />

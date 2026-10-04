@@ -154,18 +154,39 @@ export function downloadReportPdf(
         doc.setTextColor(110, 120, 135);
         doc.text(`ID: ${evId}`, posX + cardWidth - 8, cardY + 13, { align: 'right' });
 
-        // Image
+        // Image or PDF Document
         const isImage = ev.dataUrl && (ev.mimeType?.startsWith('image/') || ev.dataUrl.startsWith('data:image/'));
+        const isPdf = (ev.mimeType === 'application/pdf') || (ev.dataUrl && ev.dataUrl.startsWith('data:application/pdf')) || (ev.fileName && ev.fileName.toLowerCase().endsWith('.pdf'));
+
         if (isImage && ev.dataUrl) {
           try {
-            doc.addImage(ev.dataUrl, 'JPEG', posX + 8, cardY + 18, cardWidth - 16, rowImgHeight - 16);
+            const format = ev.dataUrl.includes('image/png') ? 'PNG' : 'JPEG';
+            doc.addImage(ev.dataUrl, format, posX + 8, cardY + 18, cardWidth - 16, rowImgHeight - 16);
             doc.setDrawColor(200, 200, 200);
             doc.rect(posX + 8, cardY + 18, cardWidth - 16, rowImgHeight - 16, 'S');
           } catch (imgErr) {
             doc.setFontSize(7.5);
             doc.setTextColor(120, 120, 120);
-            doc.text('[Image attached]', posX + cardWidth / 2, cardY + rowImgHeight / 2, { align: 'center' });
+            doc.text('[Inspection Photo Attached]', posX + cardWidth / 2, cardY + rowImgHeight / 2, { align: 'center' });
           }
+        } else if (isPdf) {
+          // Document card placeholder with metadata
+          doc.setFillColor(241, 245, 249);
+          doc.rect(posX + 8, cardY + 18, cardWidth - 16, rowImgHeight - 16, 'F');
+          doc.setDrawColor(2, 132, 199);
+          doc.setLineWidth(0.8);
+          doc.rect(posX + 8, cardY + 18, cardWidth - 16, rowImgHeight - 16, 'S');
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(8);
+          doc.setTextColor(2, 132, 199);
+          doc.text('[PDF EVIDENCE DOCUMENT]', posX + cardWidth / 2, cardY + 36, { align: 'center' });
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(7);
+          doc.setTextColor(51, 65, 85);
+          doc.text(doc.splitTextToSize(ev.fileName || 'Statutory Certificate', cardWidth - 24), posX + cardWidth / 2, cardY + 48, { align: 'center' });
+          doc.setFontSize(6.5);
+          doc.setTextColor(100, 116, 139);
+          doc.text('Attached in Official Annexure Dossier', posX + cardWidth / 2, cardY + rowImgHeight - 4, { align: 'center' });
         } else {
           doc.setFontSize(7.5);
           doc.setTextColor(100, 100, 100);
