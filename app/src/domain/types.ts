@@ -5,7 +5,7 @@
 import type { MassUnit } from './units';
 
 // ----------------------------- Users & RBAC -----------------------------
-export type Role = 'admin' | 'technician' | 'tester' | 'reviewer';
+export type Role = 'admin' | 'tester' | 'reviewer';
 
 export interface User {
   id: string;

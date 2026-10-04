@@ -41,7 +41,7 @@ export default function Reports() {
     <div className="space-y-6">
       <PageHeader
         icon={<FileText className="h-5 w-5" />}
-        title={isMyReports || user?.role === 'technician' || (user?.role as string) === 'tester' ? 'My Reports' : 'Certified Test Reports'}
+        title={isMyReports || user?.role === 'tester' ? 'My Reports' : 'Certified Test Reports'}
         subtitle="Cryptographically sealed, verifiable evaluation certificates generated under OIML R 76 standards."
         actions={
           <Link

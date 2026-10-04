@@ -6,7 +6,7 @@ from typing import List, Dict, Any, Optional, Literal
 from datetime import date, datetime
 from pydantic import BaseModel, Field
 
-RoleType = Literal["admin", "technician", "reviewer"]
+RoleType = Literal["admin", "tester", "reviewer", "technician"]
 
 class BootstrapRequest(BaseModel):
     full_name: str
@@ -58,7 +58,7 @@ class UserCreate(BaseModel):
     email: str
     full_name: str
     password: str
-    role: RoleType = "technician"
+    role: RoleType = "tester"
 
 class UserUpdate(BaseModel):
     email: Optional[str] = None
@@ -223,6 +223,7 @@ class DashboardKPIs(BaseModel):
     # Role-specific counts
     total_users: Optional[int] = 0
     technicians_count: Optional[int] = 0
+    testers_count: Optional[int] = 0
     reviewers_count: Optional[int] = 0
     returned_count: Optional[int] = 0
 

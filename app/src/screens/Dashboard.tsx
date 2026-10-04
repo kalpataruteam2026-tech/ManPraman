@@ -51,7 +51,7 @@ function AdminDashboard() {
   const navigate = useNavigate();
 
   const totalUsers = users.length;
-  const techniciansCount = users.filter((u) => u.role === 'technician').length;
+  const testersCount = users.filter((u) => u.role === 'tester').length;
   const reviewersCount = users.filter((u) => u.role === 'reviewer').length;
   const totalSessions = sessions.length;
   const inProgress = sessions.filter((s) => s.status === 'in_progress' || s.status === 'draft').length;
@@ -122,7 +122,7 @@ function AdminDashboard() {
           value={totalUsers}
           icon={Users}
           tone="accent"
-          hint={`${techniciansCount} Testers · ${reviewersCount} Reviewers`}
+          hint={`${testersCount} Testers · ${reviewersCount} Reviewers`}
         />
         <StatCard
           label="Test Sessions"

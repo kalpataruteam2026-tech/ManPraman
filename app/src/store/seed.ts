@@ -26,7 +26,7 @@ const iso = (daysAgo: number) => new Date(Date.now() - daysAgo * 86400000).toISO
 
 export const DEMO_USERS: User[] = [
   { id: 'u_admin', name: 'R. Nair', role: 'admin', designation: 'System Administrator', jurisdiction: 'Central' },
-  { id: 'u_tech', name: 'S. Kulkarni', role: 'technician', designation: 'Metrology Tester', jurisdiction: 'RRSL Mumbai' },
+  { id: 'u_tech', name: 'S. Kulkarni', role: 'tester', designation: 'Metrology Tester', jurisdiction: 'RRSL Mumbai' },
   { id: 'u_rev', name: 'Dr. A. Menon', role: 'reviewer', designation: 'Senior Metrology Reviewer', jurisdiction: 'RRSL Mumbai' },
 ];
 

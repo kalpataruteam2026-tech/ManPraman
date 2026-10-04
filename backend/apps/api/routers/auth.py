@@ -181,7 +181,7 @@ def register(req: UserCreate, db: Session = Depends(get_db)):
     user = AppUser(
         email=target_email,
         full_name=req.full_name.strip(),
-        role=req.role or "technician",
+        role=req.role or "tester",
         pw_hash=hashed_pw,
         status="active"
     )
@@ -369,7 +369,7 @@ def login_with_google(req: GoogleAuthRequest, db: Session = Depends(get_db)):
     if not user:
         full_name = name or target_email.split("@")[0].replace(".", " ").title()
         total_existing = db.query(AppUser).count()
-        role = "admin" if total_existing == 0 else "technician"
+        role = "admin" if total_existing == 0 else "tester"
 
         user = AppUser(
             email=target_email,
@@ -447,10 +447,10 @@ def create_user(
     if existing:
         raise HTTPException(status_code=400, detail="User with this email already exists")
 
-    if req.role not in ["admin", "technician", "reviewer"]:
+    if req.role not in ["admin", "tester", "technician", "reviewer"]:
         raise HTTPException(
             status_code=400,
-            detail="Role must strictly be one of: 'admin', 'technician', 'reviewer'"
+            detail="Role must strictly be one of: 'admin', 'tester', 'reviewer'"
         )
 
     new_user = AppUser(
@@ -482,8 +482,8 @@ def update_user(
     if req.full_name is not None:
         user.full_name = req.full_name.strip()
     if req.role is not None:
-        if req.role not in ["admin", "technician", "reviewer"]:
-            raise HTTPException(status_code=400, detail="Role must strictly be 'admin', 'technician', or 'reviewer'")
+        if req.role not in ["admin", "tester", "technician", "reviewer"]:
+            raise HTTPException(status_code=400, detail="Role must strictly be 'admin', 'tester', or 'reviewer'")
         user.role = req.role
     if req.status is not None:
         user.status = req.status

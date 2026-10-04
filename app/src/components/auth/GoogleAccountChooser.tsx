@@ -26,13 +26,13 @@ const DEFAULT_DEVICE_ACCOUNTS: GoogleAccount[] = [
     name: 'Rutvik M',
     email: 'rutvik.metrocert@gmail.com',
     avatarUrl: 'https://lh3.googleusercontent.com/a/default-user',
-    role: 'technician',
+    role: 'tester',
   },
   {
     name: 'Metrology Testing Officer',
     email: 'tester.oiml@gmail.com',
     avatarUrl: 'https://lh3.googleusercontent.com/a/default-user',
-    role: 'technician',
+    role: 'tester',
   },
 ];
 
@@ -97,7 +97,7 @@ export default function GoogleAccountChooser({
             name: u.name,
             email: u.email!,
             avatarUrl: u.avatarUrl,
-            role: u.role || 'technician',
+            role: u.role || 'tester',
           });
         }
       }
@@ -134,7 +134,7 @@ export default function GoogleAccountChooser({
           id: `u_goog_${account.email.replace(/[^a-z0-9]/gi, '_')}`,
           email: account.email,
           full_name: account.name,
-          role: account.role || 'technician',
+          role: account.role || 'tester',
           avatarUrl: account.avatarUrl,
         };
       }
@@ -151,7 +151,7 @@ export default function GoogleAccountChooser({
           id: backendUser.id,
           name: account.name || backendUser.full_name || 'Google User',
           email: account.email,
-          role: (backendUser.role as Role) || account.role || 'technician',
+          role: (backendUser.role as Role) || account.role || 'tester',
           jurisdiction: 'National Central Directorate',
           designation:
             (backendUser.role || account.role) === 'admin'
@@ -195,7 +195,7 @@ export default function GoogleAccountChooser({
       name,
       email,
       avatarUrl: 'https://lh3.googleusercontent.com/a/default-user',
-      role: 'technician',
+      role: 'tester',
     };
 
     const updated = [newAcc, ...accounts.filter((a) => a.email !== email)];

@@ -141,7 +141,7 @@ function SidebarContent({ pathname, role, onNavigate }: { pathname: string; role
         <div className="flex items-center gap-2 rounded-lg bg-espresso-900 border border-espresso-800 px-3 py-2.5">
           <span className="flex h-2 w-2 rounded-full bg-pass-fg" />
           <p className="text-[11px] leading-tight text-champagne-200/80">
-            {role ? `MetroCert · ${(role === 'technician' ? 'tester' : String(role)).toUpperCase()}` : 'MetroCert Online'}
+            {role ? `MetroCert · ${String(role).toUpperCase()}` : 'MetroCert Online'}
           </p>
         </div>
       </div>
@@ -156,8 +156,8 @@ function UserMenu({ onLogout }: { onLogout: () => void }) {
   const updateUser = useAppStore((s) => s.updateUser);
 
   const name = user?.name || 'Tester User';
-  const role = user?.role || 'technician';
-  const displayRole = role === 'technician' ? 'Tester' : role;
+  const role = user?.role || 'tester';
+  const displayRole = role.charAt(0).toUpperCase() + role.slice(1);
   const initials = (name || '?')
     .split(' ')
     .map((s) => s[0])

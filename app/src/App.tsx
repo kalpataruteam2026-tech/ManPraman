@@ -92,7 +92,7 @@ export default function App() {
         <Route path="library" element={<Navigate to="/app/rulebook" replace />} />
 
         {/* Operational Testing Routes (Admin + Tester) */}
-        <Route element={<RequireRole allowed={['admin', 'technician', 'tester']} />}>
+        <Route element={<RequireRole allowed={['admin', 'tester']} />}>
           <Route path="sessions/new" element={<NewSession />} />
           <Route path="new" element={<NewSession />} />
           <Route path="my-sessions" element={<SessionsList />} />

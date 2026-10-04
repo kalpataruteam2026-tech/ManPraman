@@ -44,7 +44,7 @@ export default function UsersManagement() {
   // Form state
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [role, setRole] = useState<Role>('technician');
+  const [role, setRole] = useState<Role>('tester');
   const [isActive, setIsActive] = useState(true);
 
   const filteredUsers = users
@@ -63,7 +63,7 @@ export default function UsersManagement() {
     setEditingUser(null);
     setName('');
     setEmail('');
-    setRole('technician');
+    setRole('tester');
     setIsActive(true);
     setModalOpen(true);
   }
@@ -110,7 +110,7 @@ export default function UsersManagement() {
 
   const adminCount = users.filter((u) => u.role === 'admin' && u.active !== false).length;
   const reviewerCount = users.filter((u) => u.role === 'reviewer' && u.active !== false).length;
-  const techCount = users.filter((u) => u.role === 'technician' && u.active !== false).length;
+  const testerCount = users.filter((u) => u.role === 'tester' && u.active !== false).length;
   const activeCount = users.filter((u) => u.active !== false).length;
 
   return (
@@ -188,7 +188,7 @@ export default function UsersManagement() {
               </div>
             </div>
             <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-bold text-emerald-700 border border-emerald-200">
-              {techCount} Active
+              {testerCount} Active
             </span>
           </div>
           <p className="mt-3 text-xs leading-relaxed text-slate-600">
@@ -254,7 +254,7 @@ export default function UsersManagement() {
                 const isSelf = u.id === currentUser?.id;
                 const active = u.active !== false;
                 const isAdmin = currentUser?.role === 'admin';
-                const canDelete = isAdmin && !isSelf && (u.role === 'technician' || u.role === 'tester' || u.role === 'reviewer');
+                const canDelete = isAdmin && !isSelf && (u.role === 'tester' || u.role === 'reviewer');
                 const initials = u.name
                   .split(' ')
                   .map((p) => p[0])
@@ -393,7 +393,7 @@ export default function UsersManagement() {
                   onChange={(e) => setRole(e.target.value as Role)}
                   className="bg-white border-slate-300 text-slate-900"
                 >
-                  <option value="technician">Tester (Operational Testing & Readings)</option>
+                  <option value="tester">Tester (Operational Testing & Readings)</option>
                   <option value="reviewer">Reviewer (Quality & Compliance Verification)</option>
                   <option value="admin">Administrator (Full System Governance)</option>
                 </Select>
@@ -414,7 +414,7 @@ export default function UsersManagement() {
             </div>
 
             <div className="mt-6 flex items-center justify-between border-t border-slate-200 pt-4">
-              {editingUser && currentUser?.role === 'admin' && editingUser.id !== currentUser?.id && (editingUser.role === 'technician' || editingUser.role === 'tester' || editingUser.role === 'reviewer') ? (
+              {editingUser && currentUser?.role === 'admin' && editingUser.id !== currentUser?.id && (editingUser.role === 'tester' || editingUser.role === 'reviewer') ? (
                 <button
                   type="button"
                   onClick={() => {
@@ -527,7 +527,6 @@ function RoleBadge({ role }: { role: Role }) {
           <FileCheck2 className="h-3 w-3 text-indigo-600" /> REVIEWER
         </span>
       );
-    case 'technician':
     case 'tester':
       return (
         <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800 border border-emerald-200 shadow-2xs">

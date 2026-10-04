@@ -91,7 +91,6 @@ const CAPS: Record<Role, Capability[]> = {
     'session.create', 'session.edit', 'session.submit', 'session.review',
     'report.generate', 'report.revoke', 'instrument.edit', 'admin',
   ],
-  technician: ['session.create', 'session.edit', 'session.submit', 'instrument.edit', 'report.generate'],
   tester: ['session.create', 'session.edit', 'session.submit', 'instrument.edit', 'report.generate'],
   reviewer: ['session.review', 'report.generate', 'report.revoke', 'session.edit'],
 };
@@ -114,7 +113,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     // Always force the core demo users to exist with correct credentials
     const demoUsers: User[] = [
       { id: 'u_demo_admin', name: 'Admin User', role: 'admin', email: 'admin@metrocert.gov.in', password: 'password123', active: true },
-      { id: 'u_demo_tech', name: 'Tester User', role: 'technician', email: 'tech@metrocert.gov.in', password: 'password123', active: true },
+      { id: 'u_demo_tech', name: 'Tester User', role: 'tester', email: 'tech@metrocert.gov.in', password: 'password123', active: true },
       { id: 'u_demo_reviewer', name: 'Reviewer User', role: 'reviewer', email: 'reviewer@metrocert.gov.in', password: 'password123', active: true },
     ];
     
@@ -130,8 +129,8 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     users = users.map((u) => {
       let newU = { ...u };
-      if (['engineer', 'tester', 'inspector', 'auditor', 'readonly', 'operator'].includes(newU.role)) {
-        newU.role = 'technician' as Role;
+      if (['engineer', 'technician', 'inspector', 'auditor', 'readonly', 'operator'].includes(newU.role as string)) {
+        newU.role = 'tester' as Role;
         needsUpdate = true;
       }
       if (!newU.password) {

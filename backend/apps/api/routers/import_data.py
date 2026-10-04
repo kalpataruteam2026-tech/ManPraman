@@ -123,7 +123,7 @@ def validate_sheet_dataset(model_name: str, metadata: dict, rows: list) -> Sheet
 @router.post("/preview", response_model=ImportPreviewResponse)
 async def preview_import_file(
     file: UploadFile = File(...),
-    current_user: AppUser = Depends(require_roles(["technician", "admin"]))
+    current_user: AppUser = Depends(require_roles(["tester", "technician", "admin"]))
 ):
     """
     Step 1 of Import Pipeline:
@@ -208,7 +208,7 @@ async def process_import_file(
     file: UploadFile = File(...),
     auto_submit: bool = Form(False),
     db: Session = Depends(get_db),
-    current_user: AppUser = Depends(require_roles(["technician", "admin"]))
+    current_user: AppUser = Depends(require_roles(["tester", "technician", "admin"]))
 ):
     """
     Step 2 of Import Pipeline:

@@ -41,7 +41,6 @@ const NodeCard = ({ title, icon: Icon, desc, role, delayIdx, status }: any) => {
   const roleColors: Record<string, string> = {
     'Admin': 'bg-espresso-900 text-champagne-200 border-espresso-700',
     'Tester': 'bg-accent-600 text-white border-accent-500',
-    'Technician': 'bg-accent-600 text-white border-accent-500',
     'Reviewer': 'bg-iris-600 text-white border-iris-500',
     'System': 'bg-paper text-ink border-line shadow-card'
   };

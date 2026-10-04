@@ -230,7 +230,7 @@ def update_instrument(
 def submit_report(
     id: str,
     db: Session = Depends(get_db),
-    user: AppUser = Depends(require_roles(["technician", "admin"]))
+    user: AppUser = Depends(require_roles(["tester", "technician", "admin"]))
 ):
     rep = db.query(Report).filter(Report.id == id).first()
     if not rep:

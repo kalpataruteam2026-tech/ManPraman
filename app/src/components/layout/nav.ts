@@ -35,7 +35,7 @@ export function getNav(role?: Role): NavItem[] {
     ];
   }
 
-  if (role === 'technician' || role === 'tester') {
+  if (role === 'tester') {
     return [
       { to: '/app', label: 'Dashboard', icon: LayoutDashboard, end: true },
       { to: '/app/instruments', label: 'Instruments / Objects', icon: Gauge },

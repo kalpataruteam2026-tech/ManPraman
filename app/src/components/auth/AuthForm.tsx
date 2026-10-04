@@ -49,14 +49,6 @@ const ROLE_CONFIG: Record<
     uidPrefix: 'u_prov_revi',
     icon: <ClipboardCheck className="h-4 w-4" />,
   },
-  technician: {
-    label: 'Technician',
-    badge: 'Technician',
-    subtitle: 'Senior Metrology Verification Officer',
-    designation: 'Senior Metrology Verification Officer',
-    uidPrefix: 'u_prov_tech',
-    icon: <FlaskConical className="h-4 w-4" />,
-  },
   tester: {
     label: 'Tester',
     badge: 'Tester',
@@ -178,7 +170,7 @@ export default function AuthForm({ onSuccess, initialView = 'login' }: AuthFormP
         id: `u_${Date.now()}`,
         name: email.split('@')[0].replace('.', ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
         email: email,
-        role: 'technician',
+        role: 'tester',
         jurisdiction: 'National Central Directorate',
         designation: 'Verification Officer',
         uid: `MC-USR-${Date.now().toString().slice(-4)}`,
