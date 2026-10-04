@@ -460,94 +460,10 @@ def make_evidence_image_flowable(data_url_or_path_or_ev, max_w=240, max_h=130):
     except Exception:
         return None
 
-def generate_default_evidence_items(inst: Dict[str, Any], meta: Dict[str, Any] = None) -> List[Dict[str, Any]]:
-    """Generates authentic representative photographic evidence items for pattern evaluation."""
-    manufacturer = inst.get("manufacturer", "Precision Weighing Technologies")
-    model = inst.get("type_designation") or inst.get("model", "DWT-300")
-    serial = inst.get("serial", "SN-2026-00817")
-    max_cap = f"{inst.get('Max', 300)} {inst.get('unit', 'kg')}"
-    min_cap = f"{inst.get('Min', 20)} {inst.get('unit', 'kg')}"
-    e_val = f"{inst.get('e', 0.1)} {inst.get('unit', 'kg')}"
-    acc_class = inst.get("accuracy_class", "III")
+def generate_default_evidence_items(inst: Dict[str, Any] = None, meta: Dict[str, Any] = None) -> List[Dict[str, Any]]:
+    """Strictly returns empty list: no synthetic or placeholder evidence allowed."""
+    return []
 
-    # Nameplate JPEG
-    np_img = PILImage.new('RGB', (500, 320), color=(240, 244, 248))
-    d = ImageDraw.Draw(np_img)
-    d.rectangle([5, 5, 495, 315], outline=(11, 31, 58), width=3)
-    d.rectangle([10, 10, 490, 60], fill=(11, 31, 58))
-    d.text((20, 20), f"{manufacturer.upper()}", fill=(255, 255, 255))
-    d.text((20, 40), "MODEL IDENTIFICATION & STATUTORY NAMEPLATE", fill=(14, 127, 146))
-    d.text((20, 75), f"Model: {model}", fill=(0, 0, 0))
-    d.text((20, 105), f"Serial No.: {serial}", fill=(0, 0, 0))
-    d.text((20, 135), f"Accuracy Class: ( {acc_class} )", fill=(0, 0, 0))
-    d.text((20, 165), f"Max: {max_cap}    Min: {min_cap}", fill=(0, 0, 0))
-    d.text((20, 195), f"e = {e_val}    d = {e_val}", fill=(0, 0, 0))
-    d.text((20, 225), "OIML R 76-1:2006 / Non-Automatic Weighing Instrument", fill=(60, 60, 60))
-    d.rectangle([20, 255, 480, 305], outline=(14, 127, 146), width=2, fill=(230, 245, 250))
-    d.text((30, 268), "APPROVED FOR LEGAL METROLOGY VERIFICATION", fill=(11, 31, 58))
-    d.text((30, 285), f"Ref: MODEL/APPROVAL/{acc_class}/{model}", fill=(100, 100, 100))
-    buf1 = io.BytesIO()
-    np_img.save(buf1, format='JPEG', quality=85)
-    np_b64 = "data:image/jpeg;base64," + base64.b64encode(buf1.getvalue()).decode('utf-8')
-
-    # Seal JPEG
-    sl_img = PILImage.new('RGB', (500, 320), color=(253, 248, 240))
-    d2 = ImageDraw.Draw(sl_img)
-    d2.rectangle([5, 5, 495, 315], outline=(180, 83, 9), width=3)
-    d2.ellipse([160, 20, 340, 200], outline=(180, 83, 9), width=3, fill=(254, 243, 199))
-    d2.text((195, 55), "LEGAL METROLOGY", fill=(180, 83, 9))
-    d2.text((205, 80), "GOVT OF INDIA", fill=(180, 83, 9))
-    d2.text((215, 110), "★ RRSL ★", fill=(217, 119, 6))
-    d2.text((200, 135), "SEALED & VERIFIED", fill=(180, 83, 9))
-    d2.text((230, 160), "2026", fill=(180, 83, 9))
-    d2.text((20, 220), "Tamper-Proof Lead Wire Verification Seal No.: RRSL-MUM-2026-S841", fill=(0, 0, 0))
-    d2.text((20, 250), "Verification Status: SECURED & CALIBRATION PROTECTED", fill=(22, 101, 52))
-    d2.text((20, 280), "Stamping Inspector: TECH-RRSL-042 | Stamping Date: 2026-09-30", fill=(100, 100, 100))
-    buf2 = io.BytesIO()
-    sl_img.save(buf2, format='JPEG', quality=85)
-    sl_b64 = "data:image/jpeg;base64," + base64.b64encode(buf2.getvalue()).decode('utf-8')
-
-    # Display Readout JPEG
-    dp_img = PILImage.new('RGB', (500, 320), color=(15, 23, 42))
-    d3 = ImageDraw.Draw(dp_img)
-    d3.rectangle([5, 5, 495, 315], outline=(51, 65, 85), width=3)
-    d3.rectangle([25, 25, 475, 180], fill=(2, 6, 23), outline=(71, 85, 105), width=2)
-    d3.text((40, 35), "DIGITAL WEIGHT INDICATOR · ZERO REFERENCE", fill=(148, 163, 184))
-    d3.text((80, 75), f"[  0.000 {inst.get('unit', 'kg')}  ]", fill=(56, 189, 248))
-    d3.text((40, 150), f"● NET    ● ZERO    ● STABLE    [Max {max_cap} e={e_val}]", fill=(34, 197, 94))
-    d3.text((25, 200), f"Indicator Unit: {inst.get('indicator', 'Integrated Digital Indicator')} 24-bit ADC", fill=(241, 245, 249))
-    d3.text((25, 230), "Reading at Zero Load (L=0) with Center-of-Zero Active", fill=(203, 213, 225))
-    d3.text((25, 260), "Verification: Form 1 & Form 2 (Zero Return / Weighing Performance)", fill=(14, 165, 233))
-    buf3 = io.BytesIO()
-    dp_img.save(buf3, format='JPEG', quality=85)
-    dp_b64 = "data:image/jpeg;base64," + base64.b64encode(buf3.getvalue()).decode('utf-8')
-
-    return [
-        {
-            "category": "nameplate",
-            "fileName": f"Nameplate_{model}.jpg",
-            "dataUrl": np_b64,
-            "caption": "Manufacturer Nameplate & Statutory Metrological Markings",
-            "notes": f"Serial: {serial} | Max {max_cap} | e={e_val} | Class {acc_class}",
-            "createdAt": "2026-09-30T10:00:00Z"
-        },
-        {
-            "category": "seals",
-            "fileName": "Verification_Seal_RRSL.jpg",
-            "dataUrl": sl_b64,
-            "caption": "Statutory Tamper-Evident Metrology Seal",
-            "notes": "RRSL Lead wire verification seal affixed to calibration adjustment access.",
-            "createdAt": "2026-09-30T10:15:00Z"
-        },
-        {
-            "category": "display",
-            "fileName": "Digital_Display_Zero.jpg",
-            "dataUrl": dp_b64,
-            "caption": "Digital Indicator Readout at Zero Reference",
-            "notes": "Center-of-zero and stable indicators active under zero load.",
-            "createdAt": "2026-09-30T10:30:00Z"
-        }
-    ]
 
 def format_evidence_cell(ev, styles, fig_no=1, is_full_width=False):
     """Formats a single evidence item into a list of flowables for a clean card table cell."""
@@ -995,10 +911,19 @@ def generate_pdf_report(
         # SUPPORTING EVIDENCE: Physical Inspection Dossier & Photographs
         # Displayed immediately after Introduction (ONLY if evidence exists)
         # If no evidence is uploaded, do NOT create an empty evidence page.
-        # ---------------------------------------------------------------------
-        evidence_items = view.get("evidence", [])
+        # Extract and strictly validate uploaded evidence:
+        # If user did not attach anything or file has no content, evidence_items is empty.
+        # No placeholders, no fake boxes, and no dummy pages will be rendered.
+        raw_evidence = view.get("evidence", [])
+        evidence_items = []
+        if raw_evidence and isinstance(raw_evidence, list):
+            for ev in raw_evidence:
+                if isinstance(ev, dict):
+                    raw_b, m_type, f_name = extract_evidence_payload(ev)
+                    if raw_b and len(raw_b) > 0:
+                        evidence_items.append(ev)
 
-        if evidence_items and isinstance(evidence_items, list) and len(evidence_items) > 0:
+        if evidence_items and len(evidence_items) > 0:
             chunk_size = 4
             for chunk_idx in range(0, len(evidence_items), chunk_size):
                 page_items = evidence_items[chunk_idx:chunk_idx + chunk_size]

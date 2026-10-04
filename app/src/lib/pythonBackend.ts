@@ -95,17 +95,19 @@ export async function generateOimlReportDocument(
   format: 'pdf' | 'docx' = 'pdf',
   payloadExtra?: { session_data?: any; instrument_data?: any; evidence?: any[] }
 ) {
-  // Automatically pull evidence from app store if not explicitly passed
-  let evidenceList = payloadExtra?.evidence;
-  if (!evidenceList || evidenceList.length === 0) {
+  // Resolve evidence: strictly use what is passed, or match session ID from store.
+  // Never attach unrelated or global evidence if none was attached to this session.
+  let evidenceList: any[] = [];
+  if (Array.isArray(payloadExtra?.evidence)) {
+    evidenceList = payloadExtra.evidence;
+  } else {
     try {
       const { useAppStore } = await import('../store/useAppStore');
       const allEv = useAppStore.getState().evidence || [];
       const sessId = payloadExtra?.session_data?.id || reportId;
-      const matched = allEv.filter((e) => e.sessionId === sessId || e.sessionId === reportId);
-      evidenceList = matched.length > 0 ? matched : allEv;
+      evidenceList = allEv.filter((e) => e.sessionId === sessId || e.sessionId === reportId);
     } catch {
-      // fallback
+      evidenceList = [];
     }
   }
 
