@@ -563,33 +563,34 @@ def format_evidence_cell(ev, styles, fig_no=1, is_full_width=False):
     associated = f"Associated Test: {test_id.upper()}" if test_id else (f"Requirement: {req_id}" if req_id else "General Inspection")
 
     max_w = 485 if is_full_width else 236
-    max_h = 240 if is_full_width else 155
+    max_h = 160 if is_full_width else 145
     img_flowable = make_evidence_image_flowable(ev, max_w=max_w, max_h=max_h)
     meta_info = ev.get("_meta_info", {})
+    safe_fig = str(fig_no).replace(".", "_").replace(" ", "_")
 
     cat_style = ParagraphStyle(
-        f'EVCat_{fig_no}_{"full" if is_full_width else "half"}',
+        f'EVCat_{safe_fig}_{"full" if is_full_width else "half"}_{id(ev)}',
         fontName='Helvetica-Bold',
         fontSize=8.5 if is_full_width else 8,
         leading=11 if is_full_width else 10,
         textColor=SLATE_PRIMARY
     )
     meta_style = ParagraphStyle(
-        f'EVMeta_{fig_no}_{"full" if is_full_width else "half"}',
+        f'EVMeta_{safe_fig}_{"full" if is_full_width else "half"}_{id(ev)}',
         fontName='Helvetica',
         fontSize=7.5 if is_full_width else 7,
         leading=9.5 if is_full_width else 9,
         textColor=SLATE_MUTED
     )
     caption_style = ParagraphStyle(
-        f'EVCap_{fig_no}_{"full" if is_full_width else "half"}',
+        f'EVCap_{safe_fig}_{"full" if is_full_width else "half"}_{id(ev)}',
         fontName='Helvetica-Bold',
         fontSize=8.5 if is_full_width else 7.5,
         leading=11 if is_full_width else 9.5,
         textColor=SLATE_DARK
     )
     badge_style = ParagraphStyle(
-        f'EVBadge_{fig_no}_{"full" if is_full_width else "half"}',
+        f'EVBadge_{safe_fig}_{"full" if is_full_width else "half"}_{id(ev)}',
         fontName='Helvetica-Bold',
         fontSize=7 if is_full_width else 6.5,
         leading=9,
@@ -1493,12 +1494,57 @@ def generate_pdf_report(
                 ]))
                 story.append(t_meas)
                 story.append(Spacer(1, 4))
-                story.append(build_verdict_box(t_obj.get("verdict", "PASSED"), "Max span variation between any two measurements |Δ(EL – E0)| = 0.24 e ≤ 0.5 e (Clause B.4.3). SPAN STABILITY EVALUATION PASSED."))
             else:
                 # Render standard observation table
                 story.append(build_obs_table(t_obj))
                 story.append(Spacer(1, 6))
                 story.append(build_verdict_box(t_obj.get("verdict", "PASSED"), t_obj.get("remarks") or f"Meets OIML R 76-1 {clause_str} acceptance tolerances."))
+
+            # In-line test evidence: attach photos/documents specifically linked to this test clause
+            norm_test_code = test_code.lower().strip()
+            norm_num = num_label.lower().strip()
+            matched_test_ev = []
+            for ev_item in evidence_items:
+                ev_t = str(ev_item.get("testId") or ev_item.get("test_id") or "").lower().strip()
+                if not ev_t:
+                    continue
+                if ev_t in (norm_test_code, norm_num, norm_test_code.replace("t", ""), norm_num.replace(".", "")):
+                    matched_test_ev.append(ev_item)
+                elif norm_test_code == "t1" and ev_t in ("weighing", "weighing_performance", "zero"):
+                    matched_test_ev.append(ev_item)
+                elif norm_test_code == "t2" and ev_t in ("temperature", "temp"):
+                    matched_test_ev.append(ev_item)
+                elif norm_test_code.startswith("t3") and ev_t in ("eccentricity", "eccent", "corner"):
+                    matched_test_ev.append(ev_item)
+                elif norm_test_code.startswith("t4") and ev_t in ("discrimination", "sensitivity"):
+                    matched_test_ev.append(ev_item)
+                elif norm_test_code == "t5" and ev_t in ("repeatability", "repeat"):
+                    matched_test_ev.append(ev_item)
+                elif norm_test_code.startswith("t6") and ev_t in ("creep", "zero_return", "time_dependence"):
+                    matched_test_ev.append(ev_item)
+                elif norm_test_code == "t7" and ev_t in ("equilibrium", "stability"):
+                    matched_test_ev.append(ev_item)
+                elif norm_test_code == "t8" and ev_t in ("tilting", "tilt"):
+                    matched_test_ev.append(ev_item)
+                elif norm_test_code == "t9" and ev_t in ("tare", "tare_device"):
+                    matched_test_ev.append(ev_item)
+
+            if matched_test_ev:
+                story.append(Spacer(1, 4))
+                for ev_sub_idx, ev_m in enumerate(matched_test_ev[:2]):
+                    cell_ev = format_evidence_cell(ev_m, styles, fig_no=f"{num_label}.{ev_sub_idx + 1}", is_full_width=True)
+                    t_ev_inline = Table([[cell_ev]], colWidths=[515])
+                    t_ev_inline.setStyle(TableStyle([
+                        ('GRID', (0,0), (-1,-1), 0.75, OIML_BORDER),
+                        ('BACKGROUND', (0,0), (-1,-1), SLATE_CARD_BG),
+                        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+                        ('TOPPADDING', (0,0), (-1,-1), 4),
+                        ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+                        ('LEFTPADDING', (0,0), (-1,-1), 6),
+                        ('RIGHTPADDING', (0,0), (-1,-1), 6),
+                    ]))
+                    story.append(t_ev_inline)
+                    story.append(Spacer(1, 3))
 
         # ---------------------------------------------------------------------
         # PAGES 49 TO 62: STATUTORY CHECKLIST (14 FULL PAGES)

@@ -132,17 +132,22 @@ export function EvidencePipeline({
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
 
-      // Validate allowed image types
-      const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg', 'application/pdf'];
-      if (!allowed.includes(file.type) && !file.type.startsWith('image/')) {
-        toast.error('Unsupported File Type', `${file.name} is not a valid JPG, PNG, or WEBP image.`);
+      // Robust check by MIME type and file extension
+      const ext = file.name.split('.').pop()?.toLowerCase() || '';
+      const isPdf = file.type === 'application/pdf' || ext === 'pdf';
+      const isImg = file.type.startsWith('image/') || ['jpg', 'jpeg', 'png', 'webp', 'bmp', 'tiff'].includes(ext);
+
+      if (!isPdf && !isImg) {
+        toast.error('Unsupported File Type', `${file.name} must be a PDF document or JPG, PNG, WEBP image.`);
         continue;
       }
 
       // Auto-suggest category if default is used
       let kind = selectedKind;
       const lower = file.name.toLowerCase();
-      if (lower.includes('nameplate') || lower.includes('badge') || lower.includes('serial')) {
+      if (isPdf || lower.includes('cert') || lower.includes('calib') || lower.includes('report') || lower.includes('sheet')) {
+        kind = 'certificate';
+      } else if (lower.includes('nameplate') || lower.includes('badge') || lower.includes('serial')) {
         kind = 'nameplate';
       } else if (lower.includes('seal') || lower.includes('wire') || lower.includes('lead')) {
         kind = 'seal';
@@ -152,17 +157,35 @@ export function EvidencePipeline({
         kind = 'weights';
       } else if (lower.includes('setup') || lower.includes('load') || lower.includes('corner')) {
         kind = 'test_setup';
-      } else if (lower.includes('cert') || lower.includes('calib')) {
-        kind = 'certificate';
+      }
+
+      // Auto-detect test association from filename if not explicitly chosen
+      let fileTestId = selectedTestId || testId || '';
+      if (!fileTestId) {
+        if (lower.includes('t1') || lower.includes('weighing') || lower.includes('performance')) {
+          fileTestId = 'weighing';
+        } else if (lower.includes('t2') || lower.includes('temp')) {
+          fileTestId = 'temperature';
+        } else if (lower.includes('t3') || lower.includes('eccent') || lower.includes('corner')) {
+          fileTestId = 'eccentricity';
+        } else if (lower.includes('t4') || lower.includes('discrim')) {
+          fileTestId = 'discrimination';
+        } else if (lower.includes('t5') || lower.includes('repeat')) {
+          fileTestId = 'repeatability';
+        } else if (lower.includes('t6') || lower.includes('creep') || lower.includes('zero_return')) {
+          fileTestId = 'creep';
+        } else if (lower.includes('t9') || lower.includes('tare')) {
+          fileTestId = 'tare';
+        }
       }
 
       try {
         const evidenceItem = await uploadEvidenceToStorage(file, {
           sessionId,
           kind,
-          caption: captionInput.trim() || generateDefaultCaption(kind, file.name),
+          caption: (files.length === 1 && captionInput.trim()) ? captionInput.trim() : generateDefaultCaption(kind, file.name),
           notes: notesInput.trim() || undefined,
-          testId: selectedTestId || undefined,
+          testId: fileTestId || undefined,
           requirementId: requirementId || undefined,
           orderIndex: sessionEvidences.length + count,
         });

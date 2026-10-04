@@ -887,6 +887,13 @@ export default function Review() {
       </div>
 
       {/* ------------------------------------------------------------- */}
+      {/* ATTACHED EVIDENCE & STATUTORY DOCUMENTS (LIVE REAL-TIME SYNC) */}
+      {/* ------------------------------------------------------------- */}
+      <div className="rounded-2xl border border-line bg-white shadow-sm overflow-hidden p-5">
+        <EvidenceUploader sessionId={id || localSession?.id || ''} hideStepperActions={true} />
+      </div>
+
+      {/* ------------------------------------------------------------- */}
       {/* SECTION 2: 17 SEPARATE TEST MODULE SECTIONS                   */}
       {/* ------------------------------------------------------------- */}
       <div className="space-y-4">

@@ -83,12 +83,13 @@ export async function uploadEvidenceToStorage(
       const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
       const filePath = `${params.sessionId}/${evidenceId}_${sanitizedFileName}`;
 
+      const detectedMime = file.type || (file.name.toLowerCase().endsWith('.pdf') ? 'application/pdf' : 'image/jpeg');
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('evidence-photos')
         .upload(filePath, file, {
           cacheControl: '3600',
           upsert: true,
-          contentType: file.type || 'image/jpeg',
+          contentType: detectedMime,
         });
 
       if (!uploadError && uploadData) {
@@ -107,6 +108,8 @@ export async function uploadEvidenceToStorage(
     }
   }
 
+  const finalMime = file.type || (file.name.toLowerCase().endsWith('.pdf') ? 'application/pdf' : 'image/jpeg');
+
   const evidenceItem: Evidence = {
     id: evidenceId,
     sessionId: params.sessionId,
@@ -117,7 +120,7 @@ export async function uploadEvidenceToStorage(
     notes: params.notes,
     fileName: file.name,
     fileSize: file.size,
-    mimeType: file.type || 'image/jpeg',
+    mimeType: finalMime,
     dataUrl: dataUrl, // ALWAYS keep base64 Data URL so local viewing and PDF generation always work 100% offline!
     storagePath: storagePath || undefined,
     storageUrl: storageUrl || undefined,

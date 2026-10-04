@@ -57,6 +57,7 @@ import {
   EccentricityQuadrantSketch,
   RollingLoadTrackSketch
 } from '../components/regulatory/OimlDiagrams';
+import { EvidencePipeline } from '../components/evidence/EvidencePipeline';
 
 interface TestObservationRow {
   L?: number | string;
@@ -869,6 +870,13 @@ export default function Review() {
             </div>
           </div>
         )}
+      </div>
+
+      {/* ------------------------------------------------------------- */}
+      {/* ATTACHED EVIDENCE & STATUTORY DOCUMENTS (LIVE REAL-TIME SYNC) */}
+      {/* ------------------------------------------------------------- */}
+      <div className="rounded-2xl border border-line bg-white shadow-sm overflow-hidden p-5">
+        <EvidencePipeline sessionId={id || localSession?.id || ''} hideStepperActions={true} />
       </div>
 
       {/* ------------------------------------------------------------- */}
