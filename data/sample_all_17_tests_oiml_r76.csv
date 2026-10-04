@@ -1,0 +1,220 @@
+# ==============================================================================
+# OFFICIAL OIML R 76-1 / R 76-2 TEST DATA IMPORT TEMPLATE
+# Non-Automatic Weighing Instruments (NAWI) Metrological Verification
+# ==============================================================================
+# SECTION 1: INSTRUMENT SPECIFICATIONS & ADMINISTRATIVE METADATA
+# Format: META,FieldName,Value
+# ------------------------------------------------------------------------------
+META,application_no,APP-OIML-2026-0881
+META,type_designation,APX-3000 Series Digital Industrial Bench Scale
+META,model,APX-3000-15K
+META,manufacturer,Apex Scales & Systems Co., Ltd
+META,applicant,National Metrology Compliance Corporation
+META,serial,SN-APX-2026-8841
+META,accuracy_class,III
+META,Max,15000
+META,Min,100
+META,e,5
+META,d,1
+META,unit,g
+META,n,3000
+META,tare,-5000
+META,temp_range,-10°C to +40°C
+META,power_supply,230 V AC 50 Hz
+META,load_cell,OIML R 60 Class C3 Strain Gauge Load Cell
+META,indicator,Integrated High-Contrast 7-Segment Digital Display
+META,software_version,v2.4.1
+META,software_checksum,0x9B4E21F8
+
+# ==============================================================================
+# SECTION 2: TEST OBSERVATION DATA FOR ALL 17 OIML R 76-1 METROLOGICAL TESTS
+# Column Definitions:
+# 1. test_code   : Statutory test code identifier (T1 to T15 / OIML clauses)
+# 2. point_name  : Unique step or measurement description
+# 3. load_L      : Reference applied standard test mass (in instrument unit, e.g. g)
+# 4. indication_I: Observed reading on scale indicator (I)
+# 5. delta_L     : Additional fractional mass applied to observe changeover (ΔL ≈ 0.5d)
+# 6. extra_param : Auxiliary parameter (temperature, corner location, time, voltage, burst kV)
+# 7. stage       : Governing MPE stage (initial = verification, service = in-service MPE)
+# ------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
+# TEST 1: ZERO-SETTING AND ZERO-TRACKING ACCURACY (OIML R 76-1: A.4.1, A.4.2)
+# Formula: E0 = I0 + 0.5d - ΔL0 - L0; Limit: |E0| <= 0.25e
+# ------------------------------------------------------------------------------
+T1,Zero_Initial_Centre,0,0,2.5,Centre,initial
+T1,Zero_Tracking_Upper_Boundary,0,0,2.2,+0.5d/s,initial
+T1,Zero_Tracking_Lower_Boundary,0,0,2.8,-0.5d/s,initial
+
+# ------------------------------------------------------------------------------
+# TEST 2: WEIGHING PERFORMANCE / LINEARITY (OIML R 76-1: A.4.4, A.5.3.1)
+# 5 test load levels across range: Min, 500e, 1000e, 2000e, Max (increasing & decreasing)
+# Formula: P = I + 0.5d - ΔL; E = P - L; Ec = E - E0; Limit: |Ec| <= MPE
+# ------------------------------------------------------------------------------
+T1,Weighing_Min_100g_Up,100,100,2.5,20C,initial
+T1,Weighing_500e_2500g_Up,2500,2500,2.5,20C,initial
+T1,Weighing_1000e_5000g_Up,5000,5001,2.5,20C,initial
+T1,Weighing_2000e_10000g_Up,10000,10001,2.5,20C,initial
+T1,Weighing_Max_15000g_Up,15000,15001,2.5,20C,initial
+T1,Weighing_2000e_10000g_Down,10000,10001,2.5,20C,initial
+T1,Weighing_1000e_5000g_Down,5000,5001,2.5,20C,initial
+T1,Weighing_500e_2500g_Down,2500,2500,2.5,20C,initial
+T1,Weighing_Min_100g_Down,100,100,2.5,20C,initial
+T1,Weighing_Zero_Return,0,0,2.5,20C,initial
+
+# ------------------------------------------------------------------------------
+# TEST 3: REPEATABILITY TEST (OIML R 76-1: A.4.10)
+# 10 consecutive load applications at 1/2 Max (7500g) and Max (15000g)
+# Formula: ΔP_max = Max(P) - Min(P); Limit: ΔP_max <= 1.0 * |MPE(L)|
+# ------------------------------------------------------------------------------
+T5,Repeat_HalfMax_Run01,7500,7500,2.5,Run1,initial
+T5,Repeat_HalfMax_Run02,7500,7500,2.5,Run2,initial
+T5,Repeat_HalfMax_Run03,7500,7501,2.5,Run3,initial
+T5,Repeat_HalfMax_Run04,7500,7500,2.5,Run4,initial
+T5,Repeat_HalfMax_Run05,7500,7500,2.5,Run5,initial
+T5,Repeat_HalfMax_Run06,7500,7500,2.5,Run6,initial
+T5,Repeat_HalfMax_Run07,7500,7501,2.5,Run7,initial
+T5,Repeat_HalfMax_Run08,7500,7500,2.5,Run8,initial
+T5,Repeat_HalfMax_Run09,7500,7500,2.5,Run9,initial
+T5,Repeat_HalfMax_Run10,7500,7500,2.5,Run10,initial
+T5,Repeat_Max_Run01,15000,15000,2.5,Run1,initial
+T5,Repeat_Max_Run02,15000,15000,2.5,Run2,initial
+T5,Repeat_Max_Run03,15000,15001,2.5,Run3,initial
+T5,Repeat_Max_Run04,15000,15000,2.5,Run4,initial
+T5,Repeat_Max_Run05,15000,15001,2.5,Run5,initial
+T5,Repeat_Max_Run06,15000,15000,2.5,Run6,initial
+T5,Repeat_Max_Run07,15000,15000,2.5,Run7,initial
+T5,Repeat_Max_Run08,15000,15001,2.5,Run8,initial
+T5,Repeat_Max_Run09,15000,15000,2.5,Run9,initial
+T5,Repeat_Max_Run10,15000,15000,2.5,Run10,initial
+
+# ------------------------------------------------------------------------------
+# TEST 4: ECCENTRICITY / OFF-CENTRE LOADING (OIML R 76-1: A.4.7)
+# Applied Load: 1/3 Max (5000g) at 4 quadrants and Centre
+# Formula: Ec = E - E0; Limit: |Ec| <= MPE(1/3 Max)
+# ------------------------------------------------------------------------------
+T3.1,Eccentricity_Pos1_Centre,5000,5000,2.5,Centre,initial
+T3.1,Eccentricity_Pos2_FrontLeft,5000,5001,2.5,Front-Left,initial
+T3.1,Eccentricity_Pos3_BackLeft,5000,5001,2.5,Back-Left,initial
+T3.1,Eccentricity_Pos4_BackRight,5000,5000,2.5,Back-Right,initial
+T3.1,Eccentricity_Pos5_FrontRight,5000,4999,2.5,Front-Right,initial
+
+# ------------------------------------------------------------------------------
+# TEST 5: TARE DEVICE & TARE WEIGHING ACCURACY (OIML R 76-1: A.4.6)
+# Verification of Tare setting precision (<=0.25e) and net indication linearity
+# ------------------------------------------------------------------------------
+T9,Tare_Setting_Zero,0,0,2.5,Tare_Zero,initial
+T9,Tare_Subtractive_5000g,5000,5000,2.5,Net_Load_5000g,initial
+T9,Tare_Subtractive_10000g,10000,10001,2.5,Net_Load_10000g,initial
+
+# ------------------------------------------------------------------------------
+# TEST 6: DISCRIMINATION TEST (OIML R 76-1: A.4.3, A.4.8.2)
+# An extra load ΔL = 1.4d smoothly placed shall provoke clear indication increase
+# ------------------------------------------------------------------------------
+T4.1.1,Discrimination_Min,100,100,0.5,Extra_1.4d,initial
+T4.1.1,Discrimination_HalfMax,7500,7500,0.5,Extra_1.4d,initial
+T4.1.1,Discrimination_Max,15000,15000,0.5,Extra_1.4d,initial
+
+# ------------------------------------------------------------------------------
+# TEST 7: SENSITIVITY TEST (OIML R 76-1: A.4.8.1, A.4.9)
+# Minimum displacement of indicating pointer for non-self indicating apparatus
+# ------------------------------------------------------------------------------
+T4.2,Sensitivity_Base_Min,100,100,2.5,Disp_2mm,initial
+T4.2,Sensitivity_HalfMax,7500,7500,2.5,Disp_2mm,initial
+T4.2,Sensitivity_Max,15000,15000,2.5,Disp_2mm,initial
+
+# ------------------------------------------------------------------------------
+# TEST 8: TILTING TEST (OIML R 76-1: A.5.1, A.5.1.1-A.5.1.3)
+# Inclined to 1/1000 and 50/1000; zero and load indication deviation checked
+# ------------------------------------------------------------------------------
+T8,Tilting_Level_Zero,0,0,2.5,Tilt_0,initial
+T8,Tilting_Level_Load5k,5000,5000,2.5,Tilt_0,initial
+T8,Tilting_Inclined_Zero,0,0,2.5,Tilt_50_per_1000,initial
+T8,Tilting_Inclined_Load5k,5000,5001,2.5,Tilt_50_per_1000,initial
+
+# ------------------------------------------------------------------------------
+# TEST 9: TEMPERATURE EFFECT ON NO-LOAD INDICATION (OIML R 76-1: A.5.3.2)
+# Evaluated at 20°C, 40°C, -10°C, 5°C, 20°C; Drift <= 1 e per 5°C (Class III)
+# ------------------------------------------------------------------------------
+T2,Temp_NoLoad_20C_Ref,0,0.0,2.5,20C,initial
+T2,Temp_NoLoad_40C_High,0,0.5,2.5,40C,initial
+T2,Temp_NoLoad_minus10C_Low,0,-0.4,2.5,-10C,initial
+T2,Temp_NoLoad_5C_Mid,0,0.1,2.5,5C,initial
+T2,Temp_NoLoad_20C_Final,0,0.0,2.5,20C,initial
+
+# ------------------------------------------------------------------------------
+# TEST 10: DAMP HEAT, STEADY STATE (OIML R 76-1: B.2)
+# Conditioned at 20°C reference and 40°C with 85% RH for 48 hours
+# ------------------------------------------------------------------------------
+T13a,DampHeat_Ref_Zero,0,0,2.5,20C_50RH,initial
+T13a,DampHeat_Ref_Load5k,5000,5000,2.5,20C_50RH,initial
+T13a,DampHeat_40C_85RH_Zero,0,0,2.5,40C_85RH,initial
+T13a,DampHeat_40C_85RH_Load5k,5000,5001,2.5,40C_85RH,initial
+T13a,DampHeat_Recovery_Zero,0,0,2.5,Recovery_24h,initial
+T13a,DampHeat_Recovery_Load5k,5000,5000,2.5,Recovery_24h,initial
+
+# ------------------------------------------------------------------------------
+# TEST 11: VOLTAGE VARIATIONS TEST (OIML R 76-1: A.5.4)
+# Supply voltage varied to 0.85 Unom (195.5 V) and 1.10 Unom (253.0 V)
+# ------------------------------------------------------------------------------
+T11,Voltage_Nominal_230V,5000,5000,2.5,230V_Nominal,initial
+T11,Voltage_Low_195V,5000,5000,2.5,195.5V_Low,initial
+T11,Voltage_High_253V,5000,5001,2.5,253.0V_High,initial
+
+# ------------------------------------------------------------------------------
+# TEST 12: SHORT TIME POWER REDUCTIONS / AC MAINS DIPS (OIML R 76-1: B.3.1)
+# Mains voltage drops by 100% for 10ms, 50% for 20ms; No significant fault
+# ------------------------------------------------------------------------------
+T12.1,PowerReduction_Baseline,5000,5000,2.5,Baseline_100pct,initial
+T12.1,PowerReduction_Dip100pct_10ms,5000,5000,2.5,Dip_100pct_10ms,initial
+T12.1,PowerReduction_Dip50pct_20ms,5000,5000,2.5,Dip_50pct_20ms,initial
+
+# ------------------------------------------------------------------------------
+# TEST 13: ELECTRICAL FAST TRANSIENTS / BURSTS (OIML R 76-1: B.3.2)
+# 1 kV on AC power lines, 0.5 kV on I/O signal circuits
+# ------------------------------------------------------------------------------
+T12.2,Burst_PowerLine_Positive,5000,5000,2.5,+1kV_5_50ns,initial
+T12.2,Burst_PowerLine_Negative,5000,5001,2.5,-1kV_5_50ns,initial
+T12.2,Burst_IO_SignalLine,5000,5000,2.5,+0.5kV_Clamp,initial
+
+# ------------------------------------------------------------------------------
+# TEST 14: ELECTROSTATIC DISCHARGE - ESD (OIML R 76-1: B.3.4)
+# Contact discharge: ±6 kV; Air discharge: ±8 kV
+# ------------------------------------------------------------------------------
+T12.4,ESD_Contact_Chassis_Pos,5000,5000,2.5,+6kV_Contact,initial
+T12.4,ESD_Contact_Chassis_Neg,5000,5000,2.5,-6kV_Contact,initial
+T12.4,ESD_Air_Enclosure_Pos,5000,5000,2.5,+8kV_Air,initial
+T12.4,ESD_Air_Enclosure_Neg,5000,5000,2.5,-8kV_Air,initial
+
+# ------------------------------------------------------------------------------
+# TEST 15: IMMUNITY TO RADIATED ELECTROMAGNETIC RF FIELDS (OIML R 76-1: B.3.5)
+# Field strength 10 V/m, 80 MHz to 2000 MHz, 80% AM modulation
+# ------------------------------------------------------------------------------
+T12.5,RF_Field_80MHz_Horizontal,5000,5000,2.5,80MHz_10Vm_Horiz,initial
+T12.5,RF_Field_80MHz_Vertical,5000,5000,2.5,80MHz_10Vm_Vert,initial
+T12.5,RF_Field_1000MHz_Horizontal,5000,5001,2.5,1000MHz_10Vm_Horiz,initial
+T12.5,RF_Field_2000MHz_Vertical,5000,5000,2.5,2000MHz_10Vm_Vert,initial
+
+# ------------------------------------------------------------------------------
+# TEST 16: SPAN STABILITY TEST (OIML R 76-1: B.4)
+# 28-day stability evaluation; maximum span drift <= 0.5 e
+# ------------------------------------------------------------------------------
+T14,SpanStability_Day00_Baseline,15000,15000,2.5,Day_00_Ref,initial
+T14,SpanStability_Day03_Reading,15000,15000,2.5,Day_03,initial
+T14,SpanStability_Day07_Reading,15000,15001,2.5,Day_07,initial
+T14,SpanStability_Day14_Reading,15000,15001,2.5,Day_14,initial
+T14,SpanStability_Day21_Reading,15000,15000,2.5,Day_21,initial
+T14,SpanStability_Day28_Final,15000,15001,2.5,Day_28_Final,initial
+
+# ------------------------------------------------------------------------------
+# TEST 17: WARM-UP TIME TEST (OIML R 76-1: A.5.2)
+# Zero and Max measured immediately at switch-on, and at 5, 15, and 30 minutes
+# ------------------------------------------------------------------------------
+T10,Warmup_0min_Zero,0,0,2.5,0min_PowerOn,initial
+T10,Warmup_0min_Max,15000,15001,2.5,0min_PowerOn,initial
+T10,Warmup_5min_Zero,0,0,2.5,5min_Elapsed,initial
+T10,Warmup_5min_Max,15000,15000,2.5,5min_Elapsed,initial
+T10,Warmup_15min_Zero,0,0,2.5,15min_Elapsed,initial
+T10,Warmup_15min_Max,15000,15000,2.5,15min_Elapsed,initial
+T10,Warmup_30min_Zero,0,0,2.5,30min_Elapsed,initial
+T10,Warmup_30min_Max,15000,15000,2.5,30min_Elapsed,initial
