@@ -1,0 +1,306 @@
+# ==========================================================================
+# METROCERT BULK OIML R 76-2 MULTI-OBJECT MULTI-SHEET DATASET
+# Contains 4 Distinct Measuring Instruments / Objects with Full Test Series
+# ==========================================================================
+
+=== SHEET: DWT-300_Platform ===
+# Object 1: Demo Weighing Technologies DWT-300 (Class III Industrial Platform)
+# Format: META,FieldName,Value
+META,type_designation,DWT-300 Heavy Duty Industrial Platform Scale
+META,model,DWT-300
+META,manufacturer,Demo Weighing Technologies
+META,applicant,Demo Weighing Corp Ltd
+META,serial,DWT300-24-00817
+META,accuracy_class,III
+META,Max,300
+META,Min,20
+META,e,0.1
+META,d,0.05
+META,unit,kg
+META,n,3000
+META,tare,-150
+META,temp_range,-10°C to +40°C
+META,power_supply,230 V AC 50 Hz
+META,load_cell,Class C3 500kg IP67 Shear Beam
+META,indicator,DWT-Digital Stainless Steel IP68 Display
+META,software_version,v3.1.2
+META,software_checksum,0x7E3A9102
+
+# TEST OBSERVATION DATA
+# Format: test_code,point_name,load_L,indication_I,delta_L,extra_param,stage
+T1,Zero_Initial,0,0,0.05,20C,initial
+T1,Min_20kg,20,20.0,0.05,20C,initial
+T1,500e_50kg,50,50.0,0.05,20C,initial
+T1,1000e_100kg,100,100.0,0.05,20C,initial
+T1,2000e_200kg,200,200.05,0.05,20C,initial
+T1,Max_300kg,300,300.05,0.05,20C,initial
+T1,Dec_200kg,200,200.0,0.05,20C,initial
+T1,Dec_100kg,100,100.0,0.05,20C,initial
+T1,Dec_50kg,50,50.0,0.05,20C,initial
+T1,Dec_20kg,20,20.0,0.05,20C,initial
+T1,Zero_Return,0,0,0.05,20C,initial
+T2,Temp_20C_Zero,0,0,0.05,20C,initial
+T2,Temp_40C_Zero,0,0.02,0.05,40C,initial
+T2,Temp_minus10C_Zero,0,-0.03,0.05,-10C,initial
+T2,Temp_5C_Zero,0,0.01,0.05,5C,initial
+T2,Temp_20C_Final,0,0.0,0.05,20C,initial
+T3.1,Center_Pos1,100,100.0,0.05,Center,initial
+T3.1,FrontLeft_Pos2,100,100.05,0.05,Front-Left,initial
+T3.1,BackLeft_Pos3,100,100.05,0.05,Back-Left,initial
+T3.1,BackRight_Pos4,100,100.0,0.05,Back-Right,initial
+T3.1,FrontRight_Pos5,100,99.95,0.05,Front-Right,initial
+T4.1.1,Discrim_Min_20kg,20,20.0,0.01,1.4d,initial
+T4.1.1,Discrim_Half_150kg,150,150.0,0.01,1.4d,initial
+T4.1.1,Discrim_Max_300kg,300,300.0,0.01,1.4d,initial
+T5,Repeat_150kg_R1,150,150.0,0.05,Run1,initial
+T5,Repeat_150kg_R2,150,150.0,0.05,Run2,initial
+T5,Repeat_150kg_R3,150,150.05,0.05,Run3,initial
+T5,Repeat_300kg_R1,300,300.0,0.05,Run1,initial
+T5,Repeat_300kg_R2,300,300.05,0.05,Run2,initial
+T5,Repeat_300kg_R3,300,300.0,0.05,Run3,initial
+T6.1,ZeroReturn_0min,0,0,0.05,0min,initial
+T6.1,ZeroReturn_30min,0,0.02,0.05,30min,initial
+T6.2,Creep_0min,300,300.0,0.05,0min,initial
+T6.2,Creep_30min,300,300.05,0.05,30min,initial
+T7,Equilibrium_Zero,0,0,0.05,Zero,initial
+T7,Equilibrium_Load,100,100.0,0.05,Load,initial
+T8,Tilting_Zero,0,0,0.05,Tilt0,initial
+T8,Tilting_Load,100,100.05,0.05,Tilt1,initial
+T9,Tare_Zero,0,0,0.05,Tare0,initial
+T9,Tare_Load100k,100,100.0,0.05,Tare100k,initial
+T10,Warmup_Zero,0,0,0.05,Zero,initial
+T10,Warmup_Max,300,300.05,0.05,Max,initial
+T11,Voltage_Nominal,100,100.0,0.05,230V,initial
+T11,Voltage_Low,100,100.0,0.05,187V,initial
+T11,Voltage_High,100,100.05,0.05,253V,initial
+T12.1,Disturbance_BurstPos,100,100.0,0.05,1kV_Pos,initial
+T12.1,Disturbance_BurstNeg,100,100.05,0.05,1kV_Neg,initial
+T13a,DampHeat_Zero,0,0,0.05,Zero,initial
+T13a,DampHeat_100k,100,100.05,0.05,Load100k,initial
+T14,Span_Zero,0,0,0.05,Zero,initial
+T14,Span_300k,300,300.05,0.05,Span300k,initial
+T15,Endurance_Zero,0,0,0.05,Zero,initial
+T15,Endurance_150k,150,150.05,0.05,100k_cycles,initial
+
+=== SHEET: METTLER_XPE205DU ===
+# Object 2: Mettler Toledo XPE-205DU (Class I Analytical Micro-Balance)
+# Format: META,FieldName,Value
+META,type_designation,XPE-205DU Micro-Analytical Semi-Micro Balance
+META,model,XPE-205DU
+META,manufacturer,Mettler Toledo AG
+META,applicant,Pharma Analytical Labs Switzerland
+META,serial,MT-XPE-2024-9912
+META,accuracy_class,I
+META,Max,220
+META,Min,0.01
+META,e,0.001
+META,d,0.0001
+META,unit,g
+META,n,220000
+META,tare,-220
+META,temp_range,+10°C to +30°C
+META,power_supply,100-240 V AC 50/60 Hz
+META,load_cell,High-Precision Electromagnetic Force Restoration (EMFR) Cell
+META,indicator,Touchscreen Color Graphic Terminal with Draft Shield
+META,software_version,v4.8.0
+META,software_checksum,0xFA88C31D
+
+# TEST OBSERVATION DATA
+# Format: test_code,point_name,load_L,indication_I,delta_L,extra_param,stage
+T1,Zero_Initial,0,0,0.0005,20C,initial
+T1,Min_0.01g,0.01,0.01,0.0005,20C,initial
+T1,50000e_50g,50,50.0,0.0005,20C,initial
+T1,100000e_100g,100,100.0002,0.0005,20C,initial
+T1,150000e_150g,150,150.0005,0.0005,20C,initial
+T1,Max_220g,220,220.0008,0.0005,20C,initial
+T1,Dec_150g,150,150.0004,0.0005,20C,initial
+T1,Dec_100g,100,100.0001,0.0005,20C,initial
+T1,Dec_50g,50,50.0,0.0005,20C,initial
+T1,Dec_0.01g,0.01,0.01,0.0005,20C,initial
+T1,Zero_Return,0,0,0.0005,20C,initial
+T2,Temp_20C_Zero,0,0,0.0005,20C,initial
+T2,Temp_30C_Zero,0,0.0002,0.0005,30C,initial
+T2,Temp_10C_Zero,0,-0.0003,0.0005,10C,initial
+T2,Temp_20C_Final,0,0.0,0.0005,20C,initial
+T3.1,Center_Pos1,70,70.0,0.0005,Center,initial
+T3.1,FrontLeft_Pos2,70,70.0002,0.0005,Front-Left,initial
+T3.1,BackLeft_Pos3,70,70.0001,0.0005,Back-Left,initial
+T3.1,BackRight_Pos4,70,70.0,0.0005,Back-Right,initial
+T3.1,FrontRight_Pos5,70,69.9998,0.0005,Front-Right,initial
+T4.1.1,Discrim_Min_0.01g,0.01,0.01,0.0001,1.4d,initial
+T4.1.1,Discrim_Half_100g,100,100.0,0.0001,1.4d,initial
+T4.1.1,Discrim_Max_220g,220,220.0,0.0001,1.4d,initial
+T5,Repeat_100g_R1,100,100.0,0.0005,Run1,initial
+T5,Repeat_100g_R2,100,100.0001,0.0005,Run2,initial
+T5,Repeat_100g_R3,100,100.0,0.0005,Run3,initial
+T5,Repeat_220g_R1,220,220.0,0.0005,Run1,initial
+T5,Repeat_220g_R2,220,220.0005,0.0005,Run2,initial
+T5,Repeat_220g_R3,220,220.0002,0.0005,Run3,initial
+T6.1,ZeroReturn_0min,0,0,0.0005,0min,initial
+T6.1,ZeroReturn_30min,0,0.0001,0.0005,30min,initial
+T6.2,Creep_0min,220,220.0,0.0005,0min,initial
+T6.2,Creep_30min,220,220.0004,0.0005,30min,initial
+T7,Equilibrium_Zero,0,0,0.0005,Zero,initial
+T7,Equilibrium_Load,50,50.0,0.0005,Load,initial
+T8,Tilting_Zero,0,0,0.0005,Tilt0,initial
+T8,Tilting_Load,50,50.0002,0.0005,Tilt1,initial
+T9,Tare_Zero,0,0,0.0005,Tare0,initial
+T9,Tare_Load50g,50,50.0,0.0005,Tare50g,initial
+T10,Warmup_Zero,0,0,0.0005,Zero,initial
+T10,Warmup_Max,220,220.0002,0.0005,Max,initial
+T11,Voltage_Nominal,50,50.0,0.0005,230V,initial
+T11,Voltage_Low,50,50.0,0.0005,187V,initial
+T11,Voltage_High,50,50.0001,0.0005,253V,initial
+T14,Span_Zero,0,0,0.0005,Zero,initial
+T14,Span_220g,220,220.0005,0.0005,Span220g,initial
+
+=== SHEET: APX-3000_BenchScale ===
+# Object 3: Apex Scales APX-3000-15K (Class III Industrial Bench Scale)
+# Format: META,FieldName,Value
+META,type_designation,APX-3000 Series Industrial Bench Scale
+META,model,APX-3000-15K
+META,manufacturer,Apex Scales & Systems Co., Ltd
+META,applicant,Apex Metrology Global Corp
+META,serial,APX15K-2024-4410
+META,accuracy_class,III
+META,Max,15000
+META,Min,100
+META,e,5
+META,d,1
+META,unit,g
+META,n,3000
+META,tare,-5000
+META,temp_range,-10°C to +40°C
+META,power_supply,230 V AC 50 Hz
+META,load_cell,Class C3 20kg Aluminum Single Point
+META,indicator,Apex IP65 Backlit LCD Terminal
+META,software_version,v2.4.1
+META,software_checksum,0x9B4E21F8
+
+# TEST OBSERVATION DATA
+# Format: test_code,point_name,load_L,indication_I,delta_L,extra_param,stage
+T1,Zero_Initial,0,0,2.5,20C,initial
+T1,Min_100g,100,100,2.5,20C,initial
+T1,500e_2500g,2500,2500,2.5,20C,initial
+T1,1000e_5000g,5000,5001,2.5,20C,initial
+T1,2000e_10000g,10000,10001,2.5,20C,initial
+T1,Max_15000g,15000,15002,2.5,20C,initial
+T1,Dec_10000g,10000,10001,2.5,20C,initial
+T1,Dec_5000g,5000,5001,2.5,20C,initial
+T1,Dec_2500g,2500,2500,2.5,20C,initial
+T1,Dec_100g,100,100,2.5,20C,initial
+T1,Zero_Return,0,0,2.5,20C,initial
+T2,Temp_20C,0,0,2.5,20C,initial
+T2,Temp_40C,0,0.8,2.5,40C,initial
+T2,Temp_minus10C,0,-0.6,2.5,-10C,initial
+T2,Temp_5C,0,0.2,2.5,5C,initial
+T2,Temp_20C_final,0,0.1,2.5,20C,initial
+T3.1,Center_1,5000,5000,2.5,Center,initial
+T3.1,FrontLeft_2,5000,5001,2.5,Front-Left,initial
+T3.1,BackLeft_3,5000,5001,2.5,Back-Left,initial
+T3.1,BackRight_4,5000,5000,2.5,Back-Right,initial
+T3.1,FrontRight_5,5000,4999,2.5,Front-Right,initial
+T4.1.1,Discrim_Min,100,100,0.5,1.4,initial
+T4.1.1,Discrim_HalfMax,7500,7500,0.5,1.4,initial
+T4.1.1,Discrim_Max,15000,15000,0.5,1.4,initial
+T5,Repeat_HalfMax_1,7500,7500,2.5,Run1,initial
+T5,Repeat_HalfMax_2,7500,7500,2.5,Run2,initial
+T5,Repeat_HalfMax_3,7500,7500,2.5,Run3,initial
+T5,Repeat_Max_1,15000,15000,2.5,Run1,initial
+T5,Repeat_Max_2,15000,15000,2.5,Run2,initial
+T5,Repeat_Max_3,15000,15001,2.5,Run3,initial
+T6.1,ZeroReturn_0min,0,0,2.5,0min,initial
+T6.1,ZeroReturn_30min,0,1,2.5,30min,initial
+T6.2,Creep_0min,15000,15000,2.5,0min,initial
+T6.2,Creep_30min,15000,15001,2.5,30min,initial
+T7,Equilibrium_Zero,0,0,2.5,Zero,initial
+T7,Equilibrium_Load,5000,5000,2.5,Load,initial
+T8,Tilting_Zero,0,0,2.5,Tilt0,initial
+T8,Tilting_Load,5000,5001,2.5,Tilt1,initial
+T9,Tare_Zero,0,0,2.5,Tare0,initial
+T9,Tare_Load5k,5000,5000,2.5,Tare5k,initial
+T10,Warmup_Zero,0,0,2.5,Zero,initial
+T10,Warmup_Max,15000,15001,2.5,Max,initial
+T11,Voltage_Nominal,5000,5000,2.5,230V,initial
+T11,Voltage_Low,5000,5000,2.5,187V,initial
+T11,Voltage_High,5000,5000,2.5,253V,initial
+T12.1,Disturbance_BurstPos,5000,5000,2.5,1kV_Pos,initial
+T12.1,Disturbance_BurstNeg,5000,5001,2.5,1kV_Neg,initial
+T13a,DampHeat_Zero,0,0,2.5,Zero,initial
+T13a,DampHeat_5k,5000,5001,2.5,Load5k,initial
+T14,Span_Zero,0,0,2.5,Zero,initial
+T14,Span_15k,15000,15001,2.5,Span15k,initial
+T15,Endurance_Zero,0,0,2.5,Zero,initial
+T15,Endurance_7k5,7500,7501,2.5,100k_cycles,initial
+
+=== SHEET: KERN_PCB6000 ===
+# Object 4: KERN PCB 6000-1 (Class II Laboratory Precision Balance)
+# Format: META,FieldName,Value
+META,type_designation,PCB 6000-1 Precision Top-Pan Balance
+META,model,PCB 6000-1
+META,manufacturer,KERN & SOHN GmbH
+META,applicant,Kern Precision Metrology Germany
+META,serial,KERN-PCB-88741
+META,accuracy_class,II
+META,Max,6000
+META,Min,5
+META,e,0.1
+META,d,0.1
+META,unit,g
+META,n,60000
+META,tare,-6000
+META,temp_range,+15°C to +35°C
+META,power_supply,12 V DC / 230 V Adapter
+META,load_cell,Class C2 High Precision Strain Gauge
+META,indicator,Backlit LCD with Bar Graph Capacity Display
+META,software_version,v1.9.4
+META,software_checksum,0x3D72B9A1
+
+# TEST OBSERVATION DATA
+# Format: test_code,point_name,load_L,indication_I,delta_L,extra_param,stage
+T1,Zero_Initial,0,0,0.05,20C,initial
+T1,Min_5g,5,5.0,0.05,20C,initial
+T1,5000e_500g,500,500.0,0.05,20C,initial
+T1,20000e_2000g,2000,2000.0,0.05,20C,initial
+T1,40000e_4000g,4000,4000.1,0.05,20C,initial
+T1,Max_6000g,6000,6000.1,0.05,20C,initial
+T1,Dec_4000g,4000,4000.0,0.05,20C,initial
+T1,Dec_2000g,2000,2000.0,0.05,20C,initial
+T1,Dec_500g,500,500.0,0.05,20C,initial
+T1,Dec_5g,5,5.0,0.05,20C,initial
+T1,Zero_Return,0,0,0.05,20C,initial
+T2,Temp_20C_Zero,0,0,0.05,20C,initial
+T2,Temp_35C_Zero,0,0.05,0.05,35C,initial
+T2,Temp_15C_Zero,0,-0.04,0.05,15C,initial
+T2,Temp_20C_Final,0,0.0,0.05,20C,initial
+T3.1,Center_Pos1,2000,2000.0,0.05,Center,initial
+T3.1,FrontLeft_Pos2,2000,2000.1,0.05,Front-Left,initial
+T3.1,BackLeft_Pos3,2000,2000.1,0.05,Back-Left,initial
+T3.1,BackRight_Pos4,2000,2000.0,0.05,Back-Right,initial
+T3.1,FrontRight_Pos5,2000,1999.9,0.05,Front-Right,initial
+T4.1.1,Discrim_Min_5g,5,5.0,0.01,1.4d,initial
+T4.1.1,Discrim_Half_3000g,3000,3000.0,0.01,1.4d,initial
+T4.1.1,Discrim_Max_6000g,6000,6000.0,0.01,1.4d,initial
+T5,Repeat_3000g_R1,3000,3000.0,0.05,Run1,initial
+T5,Repeat_3000g_R2,3000,3000.1,0.05,Run2,initial
+T5,Repeat_3000g_R3,3000,3000.0,0.05,Run3,initial
+T5,Repeat_6000g_R1,6000,6000.0,0.05,Run1,initial
+T5,Repeat_6000g_R2,6000,6000.1,0.05,Run2,initial
+T5,Repeat_6000g_R3,6000,6000.0,0.05,Run3,initial
+T6.1,ZeroReturn_0min,0,0,0.05,0min,initial
+T6.1,ZeroReturn_30min,0,0.03,0.05,30min,initial
+T6.2,Creep_0min,6000,6000.0,0.05,0min,initial
+T6.2,Creep_30min,6000,6000.1,0.05,30min,initial
+T7,Equilibrium_Zero,0,0,0.05,Zero,initial
+T7,Equilibrium_Load,2000,2000.0,0.05,Load,initial
+T8,Tilting_Zero,0,0,0.05,Tilt0,initial
+T8,Tilting_Load,2000,2000.1,0.05,Tilt1,initial
+T9,Tare_Zero,0,0,0.05,Tare0,initial
+T9,Tare_Load2000g,2000,2000.0,0.05,Tare2000g,initial
+T10,Warmup_Zero,0,0,0.05,Zero,initial
+T10,Warmup_Max,6000,6000.1,0.05,Max,initial
+T11,Voltage_Nominal,2000,2000.0,0.05,12V,initial
+T11,Voltage_Low,2000,2000.0,0.05,10.2V,initial
+T11,Voltage_High,2000,2000.1,0.05,13.8V,initial
+T14,Span_Zero,0,0,0.05,Zero,initial
+T14,Span_6000g,6000,6000.1,0.05,Span6000g,initial

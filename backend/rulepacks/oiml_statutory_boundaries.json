@@ -1,0 +1,159 @@
+{
+  "mpe_table_6": {
+    "I": [
+      {
+        "min_m": 0,
+        "max_m": 50000,
+        "mpe_e": 0.5,
+        "formula": "\u00b1 0.5 e"
+      },
+      {
+        "min_m": 50000,
+        "max_m": 200000,
+        "mpe_e": 1.0,
+        "formula": "\u00b1 1.0 e"
+      },
+      {
+        "min_m": 200000,
+        "max_m": 100000000,
+        "mpe_e": 1.5,
+        "formula": "\u00b1 1.5 e"
+      }
+    ],
+    "II": [
+      {
+        "min_m": 0,
+        "max_m": 5000,
+        "mpe_e": 0.5,
+        "formula": "\u00b1 0.5 e"
+      },
+      {
+        "min_m": 5000,
+        "max_m": 20000,
+        "mpe_e": 1.0,
+        "formula": "\u00b1 1.0 e"
+      },
+      {
+        "min_m": 20000,
+        "max_m": 100000,
+        "mpe_e": 1.5,
+        "formula": "\u00b1 1.5 e"
+      }
+    ],
+    "III": [
+      {
+        "min_m": 0,
+        "max_m": 500,
+        "mpe_e": 0.5,
+        "formula": "\u00b1 0.5 e"
+      },
+      {
+        "min_m": 500,
+        "max_m": 2000,
+        "mpe_e": 1.0,
+        "formula": "\u00b1 1.0 e"
+      },
+      {
+        "min_m": 2000,
+        "max_m": 10000,
+        "mpe_e": 1.5,
+        "formula": "\u00b1 1.5 e"
+      }
+    ],
+    "IIII": [
+      {
+        "min_m": 0,
+        "max_m": 50,
+        "mpe_e": 0.5,
+        "formula": "\u00b1 0.5 e"
+      },
+      {
+        "min_m": 50,
+        "max_m": 200,
+        "mpe_e": 1.0,
+        "formula": "\u00b1 1.0 e"
+      },
+      {
+        "min_m": 200,
+        "max_m": 1000,
+        "mpe_e": 1.5,
+        "formula": "\u00b1 1.5 e"
+      }
+    ]
+  },
+  "stage_multipliers": {
+    "initial": 1.0,
+    "inservice": 2.0
+  },
+  "test_boundaries": {
+    "T1_weighing": {
+      "criterion": "|Ec| <= |mpe|",
+      "formula": "P = I + 0.5e - dL, E = P - L, Ec = E - E0"
+    },
+    "T2_temp_zero": {
+      "criterion": "delta_P / 5C <= e (Class II, III, IIII) or <= e / 1C (Class I)"
+    },
+    "T3_eccentricity": {
+      "criterion": "|Ec| <= |mpe| at approx Max/3 (weights) or rolling load"
+    },
+    "T4_discrimination": {
+      "criterion": "I2 - I1 >= d when 1.4d extra load applied"
+    },
+    "T5_repeatability": {
+      "criterion": "Emax - Emin <= |mpe| over 10 or 20 runs"
+    },
+    "T61_zero_return": {
+      "criterion": "|delta(P30 - P0)| <= 0.5 e after 30 min"
+    },
+    "T62_creep": {
+      "criterion": "delta_P <= 0.5 e in 30 min, and <= 0.2 e between 15m and 30m"
+    },
+    "T7_stability": {
+      "criterion": "deviation <= 1 e, zero setting E0 <= 0.25 e, tare balance E0 <= 0.25 e"
+    },
+    "T8_tilting": {
+      "criterion": "unloaded delta_E <= 2 e, loaded delta_E <= |mpe|"
+    },
+    "T9_tare": {
+      "criterion": "|Ec| <= |mpe| for net weighing at 2 tare levels"
+    },
+    "T10_warmup": {
+      "criterion": "|EL - E0| <= |mpe| across 0, 5, 15, 30 min"
+    },
+    "T11_voltage": {
+      "criterion": "|Ec| <= |mpe| between -15% and +10% Unom"
+    },
+    "T12_disturbances": {
+      "criterion": "Significant fault > e detected and reacted upon"
+    },
+    "T13_damp_heat": {
+      "criterion": "|Ec| <= |mpe| after 48h 85% RH @ 40C"
+    },
+    "T14_span_stability": {
+      "criterion": "|(EL - E0)max - (EL - E0)min| <= 0.1 e over 8 runs"
+    },
+    "T15_endurance": {
+      "criterion": "|Ec_init - Ec_final| <= |mpe| after 100,000 cycles"
+    },
+    "india_2026_substitution": {
+      "clause": "Legal Metrology Fourth Amendment Rules 2026 (GSR 568(E))",
+      "tiers": [
+        {
+          "max_r": 0.2,
+          "standard_weight_pct": 20,
+          "condition": "r <= 0.2 e -> 20% Max standard weights"
+        },
+        {
+          "max_r": 0.3,
+          "standard_weight_pct": 33.33,
+          "condition": "0.2 e < r <= 0.3 e -> 33.33% Max standard weights"
+        },
+        {
+          "max_r": 999.0,
+          "standard_weight_pct": 50,
+          "condition": "r > 0.3 e -> 50% Max standard weights"
+        }
+      ]
+    }
+  }
+}

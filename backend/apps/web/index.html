@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WeighReport — OIML R 76 Type Evaluation Report Generator</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header Bar -->
+  <header class="app-header">
+    <div class="brand-wrapper">
+      <div class="brand-logo">WR</div>
+      <div>
+        <div class="brand-title">WeighReport</div>
+      </div>
+      <span class="brand-badge">OIML R 76-2</span>
+    </div>
+
+    <nav class="top-nav">
+      <button class="nav-btn active" id="nav-dashboard" onclick="switchView('dashboard')">Testing Dashboard</button>
+      <button class="nav-btn" id="nav-matrix" onclick="switchView('matrix')">Pass/Fail Matrix</button>
+      <button class="nav-btn" id="nav-workspace" onclick="switchView('workspace')">Report Workspace</button>
+      <button class="nav-btn" id="nav-equipment" onclick="switchView('equipment')">Equipment Register</button>
+    </nav>
+
+    <div class="user-profile">
+      <span class="role-badge">Lead Test Engineer</span>
+      <span>Rajesh Patel</span>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="app-main">
+    
+    <!-- 1. DASHBOARD VIEW -->
+    <section id="view-dashboard" class="view-section active">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-label">Total Reports</span>
+          <span class="kpi-value" id="kpi-total">0</span>
+        </div>
+        <div class="kpi-card pending">
+          <span class="kpi-label">In Progress</span>
+          <span class="kpi-value" id="kpi-in-progress">0</span>
+        </div>
+        <div class="kpi-card pass">
+          <span class="kpi-label">Passed</span>
+          <span class="kpi-value" id="kpi-passed">0</span>
+        </div>
+        <div class="kpi-card fail">
+          <span class="kpi-label">Failed</span>
+          <span class="kpi-value" id="kpi-failed">0</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Finalised</span>
+          <span class="kpi-value" id="kpi-finalised">0</span>
+        </div>
+      </div>
+
+      <!-- Filters & Action -->
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label class="filter-label">Search:</label>
+          <input type="text" id="filter-search" class="input-ctrl" placeholder="App no., Type, Mfr..." oninput="loadReports()">
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Verdict:</label>
+          <select id="filter-verdict" class="input-ctrl" onchange="loadReports()">
+            <option value="">All Verdicts</option>
+            <option value="passed">Passed</option>
+            <option value="failed">Failed</option>
+            <option value="incomplete">Incomplete</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Status:</label>
+          <select id="filter-status" class="input-ctrl" onchange="loadReports()">
+            <option value="">All Statuses</option>
+            <option value="draft">Draft</option>
+            <option value="in_progress">In Progress</option>
+            <option value="under_review">Under Review</option>
+            <option value="finalised">Finalised</option>
+          </select>
+        </div>
+        <div style="margin-left: auto;">
+          <button class="btn-primary" onclick="openNewReportModal()">+ New Evaluation</button>
+        </div>
+      </div>
+
+      <!-- Reports List Table -->
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Application No.</th>
+              <th>Type Designation</th>
+              <th>Accuracy Class</th>
+              <th>Max / e</th>
+              <th>Progress</th>
+              <th>Status</th>
+              <th>Verdict</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="reports-table-body">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 2. DEDICATED PASS/FAIL MATRIX VIEW (PRD FR-DSH-3) -->
+    <section id="view-matrix" class="view-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700;">Testing Compliance Pass / Fail Matrix</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Evaluation status per test for each instrument under test. Drill down into any test directly.
+          </p>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Filter Verdict:</label>
+          <select id="matrix-verdict-filter" class="input-ctrl" onchange="loadMatrix()">
+            <option value="">All</option>
+            <option value="failed">Show Only Reports with Failures</option>
+            <option value="passed">Passed</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-container" style="overflow-x: auto;">
+        <table class="data-table" id="matrix-table">
+          <thead>
+            <tr>
+              <th style="position: sticky; left: 0; background: #131b2e; z-index: 10;">Application No.</th>
+              <th>Type</th>
+              <th>Class</th>
+              <th>Overall</th>
+              <th>T1</th>
+              <th>T2</th>
+              <th>T3.1</th>
+              <th>T3.2</th>
+              <th>T4.1</th>
+              <th>T5</th>
+              <th>T6.1</th>
+              <th>T6.2</th>
+              <th>T7</th>
+              <th>T8</th>
+              <th>T9</th>
+              <th>T10</th>
+              <th>T11</th>
+              <th>T12.1</th>
+              <th>T13a</th>
+              <th>T14</th>
+              <th>T15</th>
+            </tr>
+          </thead>
+          <tbody id="matrix-table-body">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. REPORT WORKSPACE VIEW -->
+    <section id="view-workspace" class="view-section">
+      <div class="workspace-header">
+        <div class="workspace-title-box">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <h2 id="ws-app-no">APP-2026-OIML-001</h2>
+            <span id="ws-status-badge" class="badge badge-incomplete">IN PROGRESS</span>
+            <span id="ws-verdict-badge" class="badge badge-failed">FAILED</span>
+          </div>
+          <div class="workspace-meta-line">
+            <span><b>Type:</b> <span id="ws-type-name">APX-3000 Series</span></span>
+            <span><b>Class:</b> <span id="ws-class">Class III</span></span>
+            <span><b>Max:</b> <span id="ws-max">15 kg</span></span>
+            <span><b>e = d:</b> <span id="ws-e">5 g</span></span>
+            <span><b>Progress:</b> <span id="ws-progress">25%</span></span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn-secondary" onclick="switchWsTab('reports')">Generate Reports</button>
+        </div>
+      </div>
+
+      <!-- Workspace Sub-tabs -->
+      <div class="workspace-tabs">
+        <button class="ws-tab-btn active" id="wstab-btn-tests" onclick="switchWsTab('tests')">Test Forms (T1 - T15)</button>
+        <button class="ws-tab-btn" id="wstab-btn-instrument" onclick="switchWsTab('instrument')">Instrument & Application</button>
+        <button class="ws-tab-btn" id="wstab-btn-checklist" onclick="switchWsTab('checklist')">Checklist Module §17</button>
+        <button class="ws-tab-btn" id="wstab-btn-reports" onclick="switchWsTab('reports')">Report Composer & Export</button>
+      </div>
+
+      <!-- Subtab: TESTS -->
+      <div id="wstab-content-tests" class="wstab-content">
+        <!-- Test selector bar -->
+        <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem; background: var(--bg-card); padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+          <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">Select Test Form:</label>
+          <select id="test-selector" class="input-ctrl" style="min-width: 280px;" onchange="loadSelectedTest()">
+            <option value="T3.1">T3.1 Eccentricity (using weights) — A.4.7</option>
+            <option value="T1">T1 Weighing Performance — A.4.4</option>
+            <option value="T2">T2 Temperature effect on no-load — A.5.3.2</option>
+            <option value="T4.1.1">T4.1.1 Discrimination digital — A.4.8.2</option>
+            <option value="T5">T5 Repeatability test — A.4.10</option>
+            <option value="T6.1">T6.1 Zero return test — A.4.11.2</option>
+            <option value="T6.2">T6.2 Creep test — A.4.11.1</option>
+            <option value="T9">T9 Tare weighing performance — A.4.6.1</option>
+            <option value="T10">T10 Warm-up time test — A.5.2</option>
+            <option value="T11">T11 Voltage variations — A.5.4</option>
+            <option value="T12.1">T12.1 Dips & short interruptions — B.3.1</option>
+            <option value="T13a">T13a Damp heat initial test — B.2</option>
+            <option value="T14">T14 Span stability test — B.4</option>
+            <option value="T15">T15 Endurance test — A.6</option>
+          </select>
+          
+          <div style="margin-left: auto; display: flex; gap: 0.5rem;">
+            <button class="btn-secondary" onclick="simulateAT01Failure()" title="Run acceptance test AT-01 scenario">Demo Out-of-Tolerance Failure (AT-01)</button>
+            <button class="btn-secondary" onclick="restorePassingData()" title="Restore observations within tolerance">Restore In-Tolerance (Pass)</button>
+          </div>
+        </div>
+
+        <!-- Split Grid & Live Result Panel -->
+        <div class="test-workspace-split">
+          <div>
+            <!-- Test Header Condition Block -->
+            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1rem; display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-muted);">
+              <div><b>Test Observer:</b> <span id="test-header-observer">Rajesh Patel</span> | <b>Resolution:</b> 0.5 g</div>
+              <div><b>Temp:</b> 20.5 °C | <b>RH:</b> 52 % | <b>Bar. Pressure:</b> 1012 hPa</div>
+            </div>
+
+            <!-- Observations Grid -->
+            <div class="table-container">
+              <table class="data-table" id="test-grid-table">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">Loc</th>
+                    <th style="width: 60px;">Kind</th>
+                    <th>Load L (g)</th>
+                    <th>Indication I (g)</th>
+                    <th>ΔL (g)</th>
+                    <th>P (g)</th>
+                    <th>E (g)</th>
+                    <th>E0 (g)</th>
+                    <th>Ec (g)</th>
+                    <th>mpe (g)</th>
+                    <th>Result</th>
+                  </tr>
+                </thead>
+                <tbody id="test-grid-body">
+                  <!-- Dynamically rendered -->
+                </tbody>
+              </table>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem;">
+              <button class="btn-primary" onclick="saveTestObservations()">Save & Recompute Report</button>
+              <button class="btn-secondary" onclick="addGridRow()">+ Add Load Point</button>
+            </div>
+          </div>
+
+          <!-- Live Result Panel -->
+          <div class="result-panel">
+            <div class="result-panel-title">
+              <span>Metrological Compliance</span>
+              <span id="test-verdict-chip" class="badge badge-failed">FAILED</span>
+            </div>
+
+            <div id="verdict-banner-box" class="verdict-box failed">
+              <div style="font-size: 1.1rem;" id="verdict-banner-text">TEST FAILED</div>
+              <div style="font-size: 0.75rem; margin-top: 0.25rem;">Tolerance exceeded</div>
+            </div>
+
+            <div class="rule-info-box">
+              <div>Governing Clause: <b id="rule-clause">R 76-1 A.4.7.1-3</b></div>
+              <div>Formula: <b id="rule-formula">P = I + ½e − ΔL; Ec = E − E0; |Ec| ≤ mpe</b></div>
+            </div>
+
+            <div class="rule-info-box">
+              <div>Max Observed |Ec|: <b id="rule-max-ec">10.0 g</b></div>
+              <div>Worst Margin to MPE: <b id="rule-margin">-5.0 g</b></div>
+              <div>Applied MPE: <b id="rule-mpe">±5.0 g (1.0 e at 1000 e)</b></div>
+            </div>
+
+            <div style="font-size: 0.75rem; color: var(--text-dim); line-height: 1.4; margin-top: 1rem;">
+              All calculations and verdicts are evaluated server-side using exact decimal arithmetic. Manual override of computed results is prohibited.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Subtab: INSTRUMENT & APPLICATION -->
+      <div id="wstab-content-instrument" class="wstab-content" style="display: none;">
+        <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 1.5rem; max-width: 800px;">
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">General Information Concerning the Type (pp. 6-7)</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div>
+              <label class="filter-label">Accuracy Class:</label>
+              <select id="inst-class" class="input-ctrl" style="width: 100%;">
+                <option value="I">Class I (Special)</option>
+                <option value="II">Class II (High)</option>
+                <option value="III" selected>Class III (Medium)</option>
+                <option value="IIII">Class IIII (Ordinary)</option>
+              </select>
+            </div>
+            <div>
+              <label class="filter-label">Max Capacity (g):</label>
+              <input type="text" id="inst-max" class="input-ctrl" style="width: 100%;" value="15000">
+            </div>
+            <div>
+              <label class="filter-label">Min Capacity (g):</label>
+              <input type="text" id="inst-min" class="input-ctrl" style="width: 100%;" value="100">
+            </div>
+            <div>
+              <label class="filter-label">Verification Scale Interval e (g):</label>
+              <input type="text" id="inst-e" class="input-ctrl" style="width: 100%;" value="5">
+            </div>
+            <div>
+              <label class="filter-label">Actual Scale Interval d (g):</label>
+              <input type="text" id="inst-d" class="input-ctrl" style="width: 100%;" value="5">
+            </div>
+            <div>
+              <label class="filter-label">Temperature Range (°C):</label>
+              <input type="text" id="inst-temp-range" class="input-ctrl" style="width: 100%;" value="-10 °C / +40 °C">
+            </div>
+          </div>
+          <div style="margin-top: 1.5rem;">
+            <button class="btn-primary" onclick="saveInstrumentParameters()">Update Parameters & Re-evaluate</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Subtab: CHECKLIST §17 -->
+      <div id="wstab-content-checklist" class="wstab-content" style="display: none;">
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width: 80px;">Clause</th>
+                <th>Checklist Item Description</th>
+                <th style="width: 120px;">Result</th>
+                <th>Remarks</th>
+              </tr>
+            </thead>
+            <tbody id="checklist-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Subtab: REPORT COMPOSER & EXPORT -->
+      <div id="wstab-content-reports" class="wstab-content" style="display: none;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+          <!-- Detailed Report Card -->
+          <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 1.5rem;">
+            <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">Detailed Type Evaluation Report</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+              Complete R 76-2 report format with all raw tables, computed columns, formula derivations, equipment register, construction examination, and full checklist.
+            </p>
+            <div style="display: flex; gap: 0.75rem;">
+              <button class="btn-primary" onclick="generateDocument('detailed', 'pdf')">Generate Detailed PDF</button>
+              <button class="btn-secondary" onclick="generateDocument('detailed', 'docx')">Generate Detailed DOCX</button>
+            </div>
+          </div>
+
+          <!-- Summary Report Card -->
+          <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 1.5rem;">
+            <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">Short Summary Report</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+              Concise 1-3 page executive summary: instrument identification, key metrological figures, tabular test pass/fail results, failure summary, and sign-off block.
+            </p>
+            <div style="display: flex; gap: 0.75rem;">
+              <button class="btn-primary" onclick="generateDocument('summary', 'pdf')">Generate Summary PDF</button>
+              <button class="btn-secondary" onclick="generateDocument('summary', 'docx')">Generate Summary DOCX</button>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem;">Generated Artifacts History</h3>
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Document Type</th>
+                <th>Format</th>
+                <th>File Name</th>
+                <th>Generated At</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="artifacts-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. EQUIPMENT REGISTER VIEW -->
+    <section id="view-equipment" class="view-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700;">Standard Test Equipment Register (p. 8)</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Calibrated reference standards and environmental test equipment used for NAWI evaluation.
+          </p>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Equipment Name</th>
+              <th>Category</th>
+              <th>Manufacturer & Model</th>
+              <th>Serial No.</th>
+              <th>Calibration Cert. No.</th>
+              <th>Valid Until</th>
+              <th>Traceability</th>
+            </tr>
+          </thead>
+          <tbody id="equipment-table-body">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
