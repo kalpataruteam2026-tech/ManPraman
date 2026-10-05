@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MetroCert (SIH26035) — System Architecture Diagram</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #070b14;
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+    .header-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0284c7, #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+    }
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+    }
+    .brand-subtitle {
+      font-size: 12px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+    .badges {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge-vercel { background: rgba(2, 132, 199, 0.15); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; }
+    .badge-render { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; }
+    .badge-aws { background: rgba(234, 88, 12, 0.15); border: 1px solid rgba(249, 115, 22, 0.4); color: #fb923c; }
+    .badge-cloudinary { background: rgba(217, 119, 6, 0.15); border: 1px solid rgba(245, 158, 11, 0.4); color: #fbbf24; }
+    .controls {
+      display: flex;
+      gap: 12px;
+    }
+    .btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #f1f5f9;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn:hover {
+      background: #334155;
+      border-color: #475569;
+    }
+    .btn-primary {
+      background: #2563eb;
+      border-color: #3b82f6;
+    }
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+    .container {
+      max-width: 1700px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+    .diagram-wrapper {
+      background: #0b1120;
+      border-radius: 20px;
+      border: 1px solid #1e293b;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .svg-container {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .legend-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-top: 36px;
+    }
+    .card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      padding: 20px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: #38bdf8;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-desc {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      background: #1e293b;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #38bdf8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-bar">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v20M6 6l12 0M6 6l-3 6a3 3 0 0 0 6 0l-3 -6M18 6l-3 6a3 3 0 0 0 6 0l-3 -6"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title">MetroCert (SIH26035) — Architecture Blueprint</div>
+        <div class="brand-subtitle">Ministry of Consumer Affairs · Legal Metrology Division · OIML R-76 Platform</div>
+      </div>
+    </div>
+
+    <div class="badges">
+      <span class="badge badge-vercel">⚡ Vercel (Frontend)</span>
+      <span class="badge badge-render">🚀 Render / Railway (Backend)</span>
+      <span class="badge badge-cloudinary">☁️ Cloudinary (MaaS Documents)</span>
+      <span class="badge badge-aws">🛡️ AWS (Cloud Services)</span>
+    </div>
+
+    <div class="controls">
+      <a href="METROCERT_SYSTEM_ARCHITECTURE.svg" target="_blank" class="btn btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14L21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+        Open Raw SVG
+      </a>
+      <button class="btn" onclick="window.print()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
+        Print / PDF
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="diagram-wrapper">
+      <object data="METROCERT_SYSTEM_ARCHITECTURE.svg" type="image/svg+xml" class="svg-container">
+        Your browser does not support SVG objects. Please open <a href="METROCERT_SYSTEM_ARCHITECTURE.svg">METROCERT_SYSTEM_ARCHITECTURE.svg</a> directly.
+      </object>
+    </div>
+
+    <div class="legend-grid">
+      <div class="card">
+        <div class="card-title" style="color: #38bdf8;">
+          <span>⚡</span> Vercel Deployment (Next.js 14)
+        </div>
+        <div class="card-desc">
+          Frontend hosted on <strong>Vercel Edge Network</strong> with zero-config CI/CD. Built with Next.js 14 App Router, React 18, Tailwind CSS 3.4, and PWA offline capabilities. Uses <span class="code-pill">Dexie.js</span> for IndexedDB persistence across 7 relational stores.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color: #34d399;">
+          <span>🚀</span> Render / Railway (FastAPI Backend)
+        </div>
+        <div class="card-desc">
+          High-performance Python 3.12 ASGI engine hosted on <strong>Render / Railway</strong>. Serves asynchronous endpoints under <span class="code-pill">/api/v1</span> with GZip compression, PBKDF2/JWT security, OpenPyXL batch spreadsheet streaming, and two-pass ReportLab 5.0 canvas generation.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color: #fbbf24;">
+          <span>☁️</span> Cloudinary Document Storage (MaaS)
+        </div>
+        <div class="card-desc">
+          Media-as-a-Service (MaaS) pipeline for storing and fetching multi-sheet Excel workbooks, calibration certificates, on-pan physical verification stamp photos, and official 64-page OIML R 76-2 certified PDF/DOCX dossiers.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color: #fb923c;">
+          <span>🛡️</span> AWS Cloud Infrastructure
+        </div>
+        <div class="card-desc">
+          High-availability cloud environment utilizing <strong>AWS VPC</strong>, EC2/ECS/App Runner microservices, AWS KMS/Secrets Manager for cryptographic key rotation, and CloudWatch telemetry for regulatory audit monitoring.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color: #c084fc;">
+          <span>🤖</span> Dual ML &amp; NLP Model Suites
+        </div>
+        <div class="card-desc">
+          <strong>Suite 1:</strong> Gradient Boosting Regressor (MPE surface), Random Forest (compliance probability), Isolation Forest (sensor anomaly detection), and TF-IDF search over 88 Legal Metrology gazette PDFs.<br>
+          <strong>Suite 2:</strong> Multi-Output Classifier predicting statutory test sets (T1–T15).
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color: #f87171;">
+          <span>⚖️</span> 2026 GSR 568(E) Substitution Optimizer
+        </div>
+        <div class="card-desc">
+          Implements Indian Legal Metrology Fourth Amendment Rules 2026: evaluates repeatability dispersion <span class="code-pill">r = Emax - Emin</span> to dynamically calculate statutory standard weights (<span class="code-pill">r ≤ 0.2e → 20%</span>, <span class="code-pill">r ≤ 0.3e → 33.3%</span>, or <span class="code-pill">50% Max</span>).
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

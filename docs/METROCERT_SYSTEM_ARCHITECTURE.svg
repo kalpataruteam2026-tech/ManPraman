@@ -1,0 +1,569 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1900" width="100%" height="100%" style="background: linear-gradient(135deg, #0b1120 0%, #0f172a 50%, #1e1b4b 100%); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="50%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#c084fc" />
+    </linearGradient>
+
+    <linearGradient id="userCardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <linearGradient id="vercelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#0369a1" stop-opacity="0.1" />
+    </linearGradient>
+
+    <linearGradient id="serverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#047857" stop-opacity="0.08" />
+    </linearGradient>
+
+    <linearGradient id="engineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b" stop-opacity="0.9" />
+      <stop offset="50%" stop-color="#172554" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.95" />
+    </linearGradient>
+
+    <linearGradient id="storageGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d97706" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#b45309" stop-opacity="0.08" />
+    </linearGradient>
+
+    <linearGradient id="awsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ea580c" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#c2410c" stop-opacity="0.1" />
+    </linearGradient>
+
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+
+    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a78bfa" />
+      <stop offset="100%" stop-color="#7c3aed" />
+    </linearGradient>
+
+    <!-- Drop Shadows & Glows -->
+    <filter id="glowCyan" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="glowOrange" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="shadowBox" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.45" />
+    </filter>
+
+    <!-- Markers for Arrows -->
+    <marker id="arrowCyan" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#38bdf8" />
+    </marker>
+    <marker id="arrowEmerald" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#10b981" />
+    </marker>
+    <marker id="arrowOrange" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f97316" />
+    </marker>
+    <marker id="arrowPurple" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#c084fc" />
+    </marker>
+    <marker id="arrowGold" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#fbbf24" />
+    </marker>
+  </defs>
+
+  <!-- ==================== HEADER BAR ==================== -->
+  <g id="headerSection" transform="translate(60, 40)">
+    <!-- Logo Badge -->
+    <rect x="0" y="0" width="80" height="80" rx="16" fill="url(#cyanGrad)" filter="url(#shadowBox)" />
+    <!-- Scales of Justice / Metrology Icon -->
+    <path d="M 40 18 L 40 62 M 24 28 L 56 28 M 24 28 L 16 46 A 8 8 0 0 0 32 46 Z M 56 28 L 48 46 A 8 8 0 0 0 64 46 Z" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+    <!-- Title & Badges -->
+    <text x="100" y="32" font-size="28" font-weight="900" fill="#ffffff" letter-spacing="1">MetroCert</text>
+    <text x="245" y="32" font-size="16" font-weight="600" fill="#38bdf8">— End-to-End System Architecture Pipeline</text>
+    <text x="100" y="58" font-size="14" font-weight="500" fill="#94a3b8">Digital OIML R-76 NAWI Testing, Pattern Approval &amp; Statutory Legal Metrology Platform</text>
+    <text x="100" y="78" font-size="12" font-weight="600" fill="#64748b">Problem Statement: SIH26035 | Ministry of Consumer Affairs, Food &amp; Public Distribution (Legal Metrology Division)</text>
+
+    <!-- Hackathon & Year Pill -->
+    <rect x="1270" y="8" width="210" height="64" rx="32" fill="#1e293b" stroke="#334155" stroke-width="2" filter="url(#shadowBox)"/>
+    <!-- SIH Logo representation -->
+    <circle cx="1308" cy="40" r="20" fill="#f97316" />
+    <path d="M 1300 40 L 1308 30 L 1316 40 L 1308 50 Z" fill="#ffffff" />
+    <text x="1340" y="36" font-size="16" font-weight="800" fill="#ffffff">SIH 2026</text>
+    <text x="1340" y="54" font-size="11" font-weight="700" fill="#38bdf8">LEGAL METROLOGY</text>
+  </g>
+
+  <!-- ==================== TOP LEFT: USERS & ROLE-BASED DASHBOARD (VERCEL) ==================== -->
+  <!-- Container: Frontend Deployed on Vercel -->
+  <g id="vercelFrontendContainer" transform="translate(60, 150)">
+    <rect x="0" y="0" width="560" height="340" rx="20" fill="url(#vercelGrad)" stroke="#0284c7" stroke-width="2" stroke-dasharray="6 4" filter="url(#shadowBox)"/>
+    
+    <!-- Header Tag -->
+    <rect x="20" y="-14" width="280" height="28" rx="14" fill="#0284c7" />
+    <text x="35" y="5" font-size="12" font-weight="800" fill="#ffffff" letter-spacing="0.5">⚡ FRONTEND DEPLOYED ON VERCEL</text>
+    <text x="315" y="5" font-size="11" font-weight="600" fill="#7dd3fc">Next.js 14 App Router · React 18 · PWA</text>
+
+    <!-- Role-Based Metrology Dashboard Box -->
+    <g transform="translate(25, 28)">
+      <rect x="0" y="0" width="510" height="85" rx="12" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
+      <rect x="14" y="14" width="40" height="40" rx="8" fill="#38bdf8" fill-opacity="0.15" stroke="#38bdf8" stroke-width="1"/>
+      <!-- Dashboard Icon -->
+      <path d="M 22 26 H 32 V 42 H 22 Z M 36 32 H 46 V 42 H 36 Z M 22 20 H 46" stroke="#38bdf8" stroke-width="2" fill="none"/>
+      <text x="66" y="34" font-size="16" font-weight="800" fill="#ffffff">Role-Based Metrology Dashboard</text>
+      <text x="66" y="54" font-size="12" font-weight="500" fill="#94a3b8">Interactive OIML Formats 1–17 · Live MPE Tolerance Corridors · Three.js 3D Scale</text>
+      <text x="66" y="72" font-size="11" font-weight="700" fill="#34d399">✓ Offline-Ready PWA · Dexie.js (IndexedDB 7 Relational Collections)</text>
+    </g>
+
+    <!-- 3 Roles Visual Cards -->
+    <!-- Role 1: Tester -->
+    <g transform="translate(25, 125)">
+      <rect x="0" y="0" width="160" height="95" rx="10" fill="#1e293b" stroke="#334155" stroke-width="1.2"/>
+      <circle cx="28" cy="28" r="14" fill="#0284c7" />
+      <path d="M 23 35 C 23 29 33 29 33 35 M 28 25 A 4 4 0 1 0 28 17 A 4 4 0 0 0 28 25" stroke="#fff" stroke-width="1.5" fill="none"/>
+      <text x="50" y="32" font-size="13" font-weight="700" fill="#ffffff">Field Tester</text>
+      <text x="12" y="58" font-size="10.5" font-weight="500" fill="#94a3b8">• Capture Load Readings</text>
+      <text x="12" y="72" font-size="10.5" font-weight="500" fill="#94a3b8">• Pan Photos &amp; Seals</text>
+      <text x="12" y="86" font-size="10.5" font-weight="600" fill="#38bdf8">• Submit Test Session</text>
+    </g>
+
+    <!-- Role 2: Reviewer -->
+    <g transform="translate(200, 125)">
+      <rect x="0" y="0" width="160" height="95" rx="10" fill="#1e293b" stroke="#334155" stroke-width="1.2"/>
+      <circle cx="28" cy="28" r="14" fill="#7c3aed" />
+      <path d="M 23 35 C 23 29 33 29 33 35 M 28 25 A 4 4 0 1 0 28 17 A 4 4 0 0 0 28 25" stroke="#fff" stroke-width="1.5" fill="none"/>
+      <text x="50" y="32" font-size="13" font-weight="700" fill="#ffffff">QA Reviewer</text>
+      <text x="12" y="58" font-size="10.5" font-weight="500" fill="#94a3b8">• Audit Math Traces</text>
+      <text x="12" y="72" font-size="10.5" font-weight="500" fill="#94a3b8">• Inspect MPE Curves</text>
+      <text x="12" y="86" font-size="10.5" font-weight="600" fill="#c084fc">• Approve / Reject Sign-Off</text>
+    </g>
+
+    <!-- Role 3: Admin -->
+    <g transform="translate(375, 125)">
+      <rect x="0" y="0" width="160" height="95" rx="10" fill="#1e293b" stroke="#334155" stroke-width="1.2"/>
+      <circle cx="28" cy="28" r="14" fill="#ea580c" />
+      <path d="M 23 35 C 23 29 33 29 33 35 M 28 25 A 4 4 0 1 0 28 17 A 4 4 0 0 0 28 25" stroke="#fff" stroke-width="1.5" fill="none"/>
+      <text x="50" y="32" font-size="13" font-weight="700" fill="#ffffff">Legal Officer</text>
+      <text x="12" y="58" font-size="10.5" font-weight="500" fill="#94a3b8">• Rulepack Governance</text>
+      <text x="12" y="72" font-size="10.5" font-weight="500" fill="#94a3b8">• Standard Weight Master</text>
+      <text x="12" y="86" font-size="10.5" font-weight="600" fill="#fb923c">• SHA-256 Audit Ledger</text>
+    </g>
+
+    <!-- Batch Excel Ingestion Bar on Frontend -->
+    <g transform="translate(25, 235)">
+      <rect x="0" y="0" width="510" height="85" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+      <rect x="14" y="16" width="36" height="36" rx="8" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="1"/>
+      <text x="25" y="39" font-size="18" font-weight="900" fill="#10b981">X</text>
+      <text x="62" y="34" font-size="14" font-weight="700" fill="#ffffff">Multi-Sheet Excel (.xlsx) &amp; CSV Ingest Pipeline</text>
+      <text x="62" y="52" font-size="11" font-weight="500" fill="#94a3b8">Interactive Sheet Selector · Automated Validation Pre-Flight · SheetJS Client Parser</text>
+      <text x="62" y="70" font-size="11" font-weight="600" fill="#38bdf8">Supports 17 Test Formats with `# === SHEET ===` &amp; Metadata Headers</text>
+    </g>
+  </g>
+
+  <!-- ==================== TOP RIGHT: CLOUDINARY, AWS & DATABASE ==================== -->
+  <!-- Container: Storage, Cloud & Database Layer -->
+  <g id="storageAndCloudContainer" transform="translate(980, 150)">
+    <rect x="0" y="0" width="560" height="340" rx="20" fill="url(#storageGrad)" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6 4" filter="url(#shadowBox)"/>
+    
+    <rect x="20" y="-14" width="330" height="28" rx="14" fill="#d97706" />
+    <text x="35" y="5" font-size="12" font-weight="800" fill="#ffffff" letter-spacing="0.5">☁️ CLOUDINARY, AWS &amp; METROLOGY DB</text>
+
+    <!-- Cloudinary MaaS Box -->
+    <g transform="translate(25, 28)">
+      <rect x="0" y="0" width="510" height="92" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+      <rect x="14" y="16" width="44" height="44" rx="8" fill="#38bdf8" fill-opacity="0.2" stroke="#38bdf8" stroke-width="1.2"/>
+      <!-- Cloudinary cloud logo -->
+      <path d="M 26 44 A 8 8 0 0 1 34 32 A 10 10 0 0 1 50 34 A 7 7 0 0 1 52 44 Z" fill="#38bdf8"/>
+      <text x="70" y="34" font-size="16" font-weight="800" fill="#ffffff">Cloudinary Storage (MaaS)</text>
+      <text x="70" y="52" font-size="11" font-weight="600" fill="#38bdf8">Media &amp; Statutory Document Storage as a Service</text>
+      <text x="70" y="70" font-size="11" font-weight="500" fill="#cbd5e1">• Excel Workbooks (.xlsx) &amp; Calibration Batch Files</text>
+      <text x="70" y="86" font-size="11" font-weight="500" fill="#cbd5e1">• Physical Evidence (Stamps, Load Cell Plates, Pan Photos)</text>
+    </g>
+
+    <!-- Dual-Tier Database Box -->
+    <g transform="translate(25, 132)">
+      <rect x="0" y="0" width="510" height="92" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+      <rect x="14" y="16" width="44" height="44" rx="8" fill="#10b981" fill-opacity="0.2" stroke="#10b981" stroke-width="1.2"/>
+      <!-- Database Cylinders -->
+      <ellipse cx="36" cy="30" rx="14" ry="5" fill="#10b981" />
+      <path d="M 22 30 V 42 A 14 5 0 0 0 50 42 V 30" fill="none" stroke="#10b981" stroke-width="2"/>
+      <path d="M 22 42 V 54 A 14 5 0 0 0 50 54 V 42" fill="none" stroke="#10b981" stroke-width="2"/>
+      <text x="70" y="34" font-size="15" font-weight="800" fill="#ffffff">Dual-Tier Metrology Database</text>
+      <text x="70" y="52" font-size="11" font-weight="600" fill="#34d399">Supabase PostgreSQL 16 (Primary) + SQLite 3 Fallback</text>
+      <text x="70" y="70" font-size="11" font-weight="500" fill="#94a3b8">• Isolated `oiml` Schema with Row-Level Security (RLS)</text>
+      <text x="70" y="86" font-size="11" font-weight="500" fill="#94a3b8">• Append-Only Tamper-Evident SHA-256 Audit Trail</text>
+    </g>
+
+    <!-- Authentication & Security Box -->
+    <g transform="translate(25, 236)">
+      <rect x="0" y="0" width="510" height="85" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+      <rect x="14" y="16" width="44" height="44" rx="8" fill="#c084fc" fill-opacity="0.2" stroke="#c084fc" stroke-width="1.2"/>
+      <!-- Shield Key -->
+      <path d="M 36 24 L 46 28 V 38 C 46 44 36 50 36 50 C 36 50 26 44 26 38 V 28 Z" fill="none" stroke="#c084fc" stroke-width="2"/>
+      <text x="70" y="34" font-size="15" font-weight="800" fill="#ffffff">Authentication &amp; Metrological Access Control</text>
+      <text x="70" y="52" font-size="11" font-weight="500" fill="#cbd5e1">Google OAuth 2.0 Federation + HMAC-SHA256 Signed Bearer Tokens</text>
+      <text x="70" y="70" font-size="11" font-weight="500" fill="#cbd5e1">PBKDF2-HMAC-SHA256 Salted Password Hashing (100,000 Rounds)</text>
+    </g>
+  </g>
+
+  <!-- ==================== CENTER: AWS CLOUD INFRASTRUCTURE ==================== -->
+  <g id="awsCloudCenter" transform="translate(680, 160)">
+    <rect x="0" y="0" width="240" height="315" rx="18" fill="url(#awsGrad)" stroke="#f97316" stroke-width="2" filter="url(#shadowBox)"/>
+    <rect x="20" y="-12" width="200" height="24" rx="12" fill="#ea580c" />
+    <text x="32" y="4" font-size="11" font-weight="800" fill="#ffffff" letter-spacing="0.5">☁️ AWS CLOUD SERVICES</text>
+    
+    <g transform="translate(20, 25)">
+      <circle cx="100" cy="35" r="28" fill="#ea580c" fill-opacity="0.2" stroke="#ea580c" stroke-width="2"/>
+      <!-- Cloud Server Icon -->
+      <path d="M 85 40 A 10 10 0 0 1 95 25 A 14 14 0 0 1 115 28 A 10 10 0 0 1 115 42 Z" fill="#ea580c"/>
+      <text x="100" y="80" text-anchor="middle" font-size="14" font-weight="800" fill="#ffffff">AWS Cloud</text>
+      <text x="100" y="96" text-anchor="middle" font-size="12" font-weight="700" fill="#fdba74">Infrastructure</text>
+      
+      <rect x="10" y="115" width="180" height="28" rx="6" fill="#1e293b"/>
+      <text x="100" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#fed7aa">AWS VPC / Networking</text>
+
+      <rect x="10" y="150" width="180" height="28" rx="6" fill="#1e293b"/>
+      <text x="100" y="168" text-anchor="middle" font-size="11" font-weight="600" fill="#fed7aa">EC2 / App Runner Compute</text>
+
+      <rect x="10" y="185" width="180" height="28" rx="6" fill="#1e293b"/>
+      <text x="100" y="203" text-anchor="middle" font-size="11" font-weight="600" fill="#fed7aa">KMS &amp; Secrets Manager</text>
+
+      <rect x="10" y="220" width="180" height="28" rx="6" fill="#1e293b"/>
+      <text x="100" y="238" text-anchor="middle" font-size="11" font-weight="600" fill="#fed7aa">CloudWatch Monitoring</text>
+
+      <rect x="10" y="255" width="180" height="24" rx="6" fill="#1e293b"/>
+      <text x="100" y="271" text-anchor="middle" font-size="10.5" font-weight="600" fill="#38bdf8">High Availability Zone</text>
+    </g>
+  </g>
+
+  <!-- ==================== MIDDLE: FASTAPI BACKEND SERVER (RENDER / RAILWAY) ==================== -->
+  <g id="backendServerContainer" transform="translate(60, 525)">
+    <rect x="0" y="0" width="1480" height="235" rx="20" fill="url(#serverGrad)" stroke="#10b981" stroke-width="2" filter="url(#shadowBox)"/>
+    
+    <rect x="25" y="-14" width="460" height="28" rx="14" fill="#059669" />
+    <text x="40" y="5" font-size="12" font-weight="800" fill="#ffffff" letter-spacing="0.5">🚀 BACKEND API SERVER (DEPLOYED ON RENDER / RAILWAY)</text>
+    <text x="500" y="5" font-size="11" font-weight="600" fill="#6ee7b7">Python 3.12 · FastAPI 0.110 · Uvicorn ASGI · GZip Compression · REST Endpoints</text>
+
+    <!-- 4 Sub-Columns in Backend -->
+    <!-- Col 1: REST API Gateway & Routing -->
+    <g transform="translate(30, 30)">
+      <rect x="0" y="0" width="330" height="175" rx="12" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
+      <text x="20" y="32" font-size="14" font-weight="800" fill="#34d399">REST API Gateway &amp; Routers</text>
+      <text x="20" y="56" font-size="11.5" font-weight="500" fill="#cbd5e1">• /api/v1/auth (RBAC, Google OAuth)</text>
+      <text x="20" y="78" font-size="11.5" font-weight="500" fill="#cbd5e1">• /api/v1/applications (Pattern Dossiers)</text>
+      <text x="20" y="100" font-size="11.5" font-weight="500" fill="#cbd5e1">• /api/v1/tests (17 Statutory Test Runners)</text>
+      <text x="20" y="122" font-size="11.5" font-weight="500" fill="#cbd5e1">• /api/v1/reports (Review Sign-Off &amp; PDFs)</text>
+      <text x="20" y="144" font-size="11.5" font-weight="500" fill="#cbd5e1">• /api/v1/dashboard (National KPIs &amp; Audits)</text>
+      <text x="20" y="164" font-size="11" font-weight="700" fill="#38bdf8">OpenAPI 3.1 Interactive Docs (/docs)</text>
+    </g>
+
+    <!-- Col 2: Data Ingestion & OpenPyXL Pipeline -->
+    <g transform="translate(390, 30)">
+      <rect x="0" y="0" width="330" height="175" rx="12" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
+      <text x="20" y="32" font-size="14" font-weight="800" fill="#38bdf8">Batch Ingest &amp; OpenPyXL Engine</text>
+      <text x="20" y="56" font-size="11.5" font-weight="500" fill="#cbd5e1">• Multi-Sheet Workbook (.xlsx) Parsing</text>
+      <text x="20" y="78" font-size="11.5" font-weight="500" fill="#cbd5e1">• Multi-Object CSV Pipeline with # META</text>
+      <text x="20" y="100" font-size="11.5" font-weight="500" fill="#cbd5e1">• Automated Parameter Pre-Flight Validation</text>
+      <text x="20" y="122" font-size="11.5" font-weight="500" fill="#cbd5e1">• Instrument Class &amp; Scale Step Auto-Detect</text>
+      <text x="20" y="144" font-size="11.5" font-weight="500" fill="#cbd5e1">• Streaming Multipart Payload Processing</text>
+      <text x="20" y="164" font-size="11" font-weight="700" fill="#34d399">Zero Data Truncation Guarantees</text>
+    </g>
+
+    <!-- Col 3: Cloudinary Connector & Media Bridge -->
+    <g transform="translate(750, 30)">
+      <rect x="0" y="0" width="330" height="175" rx="12" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
+      <text x="20" y="32" font-size="14" font-weight="800" fill="#f59e0b">Cloudinary MaaS Bridge</text>
+      <text x="20" y="56" font-size="11.5" font-weight="500" fill="#cbd5e1">• Secure Signed URL Token Generation</text>
+      <text x="20" y="78" font-size="11.5" font-weight="500" fill="#cbd5e1">• Upload Stream for User Excel Workbooks</text>
+      <text x="20" y="100" font-size="11.5" font-weight="500" fill="#cbd5e1">• Storage for Stamped Scale Verification Photos</text>
+      <text x="20" y="122" font-size="11.5" font-weight="500" fill="#cbd5e1">• Dynamic Delivery of Certified OIML Dossiers</text>
+      <text x="20" y="144" font-size="11.5" font-weight="500" fill="#cbd5e1">• Cloudinary CDN Edge Caching &amp; Fetching</text>
+      <text x="20" y="164" font-size="11" font-weight="700" fill="#fbbf24">Secure Blob &amp; Dossier Pipeline</text>
+    </g>
+
+    <!-- Col 4: Two-Pass Document & Verification Dispatcher -->
+    <g transform="translate(1110, 30)">
+      <rect x="0" y="0" width="330" height="175" rx="12" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
+      <text x="20" y="32" font-size="14" font-weight="800" fill="#c084fc">ReportKit &amp; Cryptographic Dispatch</text>
+      <text x="20" y="56" font-size="11.5" font-weight="500" fill="#cbd5e1">• ReportLab 5.0 OimlNumberedCanvas (PDF)</text>
+      <text x="20" y="78" font-size="11.5" font-weight="500" fill="#cbd5e1">• python-docx Microsoft Word Generator</text>
+      <text x="20" y="100" font-size="11.5" font-weight="500" fill="#cbd5e1">• SHA-256 Digest Extraction &amp; Hash Chain</text>
+      <text x="20" y="122" font-size="11.5" font-weight="500" fill="#cbd5e1">• High-Density QR Verification Seal Builder</text>
+      <text x="20" y="144" font-size="11.5" font-weight="500" fill="#cbd5e1">• Statutory Checklist Section 17 Synthesis</text>
+      <text x="20" y="164" font-size="11" font-weight="700" fill="#a78bfa">Official 64-Page Legal Dossiers</text>
+    </g>
+  </g>
+
+  <!-- ==================== BOTTOM: METROLOGY & AI ENGINE (MAJOR CONTAINER) ==================== -->
+  <g id="engineContainer" transform="translate(60, 800)">
+    <rect x="0" y="0" width="1480" height="1020" rx="24" fill="url(#engineGrad)" stroke="#6366f1" stroke-width="2.5" filter="url(#shadowBox)"/>
+    
+    <!-- Engine Header Badge -->
+    <rect x="35" y="-18" width="580" height="36" rx="18" fill="#4f46e5" filter="url(#shadowBox)"/>
+    <text x="55" y="6" font-size="14" font-weight="900" fill="#ffffff" letter-spacing="1">🔬 DETERMINISTIC METROLOGY &amp; AI COMPLIANCE ENGINE</text>
+    <text x="635" y="6" font-size="12" font-weight="700" fill="#a5b4fc">OIML R 76-1:2006 · OIML R 76-2:2007 (Formats 1–17) · 2026 GSR 568(E) Rulepack</text>
+
+    <!-- SECTION 1: AI / MACHINE LEARNING & NLP PIPELINE -->
+    <g transform="translate(35, 35)">
+      <rect x="0" y="0" width="1410" height="235" rx="16" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+      <rect x="20" y="-12" width="410" height="24" rx="12" fill="#7c3aed"/>
+      <text x="32" y="4" font-size="11" font-weight="800" fill="#ffffff">🤖 DUAL MACHINE LEARNING &amp; NLP PIPELINE</text>
+      
+      <!-- Box 1.1: Model Suite 1 (Boundary & Anomaly) -->
+      <g transform="translate(25, 25)">
+        <rect x="0" y="0" width="430" height="185" rx="12" fill="#1e1b4b" fill-opacity="0.6" stroke="#4338ca" stroke-width="1.2"/>
+        <text x="18" y="28" font-size="14" font-weight="800" fill="#c084fc">Model Suite 1: Boundary &amp; Anomaly Engine</text>
+        <text x="18" y="46" font-size="11" font-weight="600" fill="#94a3b8">File: backend/packages/engine/oiml_boundary_model.pkl (9.6 MB)</text>
+        <text x="18" y="74" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#38bdf8">• GradientBoostingRegressor:</tspan> Fits continuous MPE surface f(Load, Class, e, Stage)</text>
+        <text x="18" y="98" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#34d399">• RandomForestClassifier:</tspan> Computes compliance confidence &amp; margin drift</text>
+        <text x="18" y="122" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#f87171">• IsolationForest:</tspan> Detects laboratory data falsification, outliers &amp; sensor jumps</text>
+        <text x="18" y="146" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#fbbf24">• Real-time Prediction:</tspan> Evaluates each load step against statistical corridor</text>
+        <rect x="18" y="158" width="394" height="18" rx="4" fill="#312e81"/>
+        <text x="215" y="171" text-anchor="middle" font-size="10" font-weight="700" fill="#c084fc">API: POST /api/v1/ml/predict-boundary</text>
+      </g>
+
+      <!-- Box 1.2: Model Suite 2 (Statutory Test Suggester) -->
+      <g transform="translate(480, 25)">
+        <rect x="0" y="0" width="430" height="185" rx="12" fill="#1e1b4b" fill-opacity="0.6" stroke="#4338ca" stroke-width="1.2"/>
+        <text x="18" y="28" font-size="14" font-weight="800" fill="#818cf8">Model Suite 2: Statutory Test Suggester</text>
+        <text x="18" y="46" font-size="11" font-weight="600" fill="#94a3b8">File: backend/packages/engine/oiml_test_suggester.pkl (1.0 MB)</text>
+        <text x="18" y="74" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#38bdf8">• Multi-Output Classifier &amp; Decision Trees:</tspan> Multi-label prediction</text>
+        <text x="18" y="98" font-size="11" font-weight="500" fill="#cbd5e1">• Input Vector: (Accuracy Class, Max, Min, e, d, n, Power Source, Device Type)</text>
+        <text x="18" y="122" font-size="11" font-weight="500" fill="#cbd5e1">• Output: Predicts mandatory test suite subset across T1 through T15</text>
+        <text x="18" y="146" font-size="11" font-weight="500" fill="#cbd5e1">• Eliminates redundant field testing while ensuring statutory compliance</text>
+        <rect x="18" y="158" width="394" height="18" rx="4" fill="#312e81"/>
+        <text x="215" y="171" text-anchor="middle" font-size="10" font-weight="700" fill="#818cf8">Trained on OIML R-76 Section 3 &amp; Indian LM Rules</text>
+      </g>
+
+      <!-- Box 1.3: Normative NLP & LLM Metrology Assistant -->
+      <g transform="translate(935, 25)">
+        <rect x="0" y="0" width="450" height="185" rx="12" fill="#1e1b4b" fill-opacity="0.6" stroke="#4338ca" stroke-width="1.2"/>
+        <text x="18" y="28" font-size="14" font-weight="800" fill="#38bdf8">NLP Semantic Search &amp; LLM Assistant</text>
+        <text x="18" y="46" font-size="11" font-weight="600" fill="#94a3b8">Corpus: 88 Official Legal Metrology Gazette PDFs &amp; OIML Standards</text>
+        <text x="18" y="74" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#34d399">• TF-IDF Vectorizer + Cosine Similarity:</tspan> Instant clause search &amp; reference</text>
+        <text x="18" y="98" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#fbbf24">• LLM Fallback &amp; Suggestion Engine:</tspan> Intelligent clause explanation</text>
+        <text x="18" y="122" font-size="11" font-weight="500" fill="#cbd5e1">• Generates non-conformity remediation notes for field technicians</text>
+        <text x="18" y="146" font-size="11" font-weight="500" fill="#cbd5e1">• Strict Guardrail: LLMs NEVER calculate math; they explain regulations</text>
+        <rect x="18" y="158" width="414" height="18" rx="4" fill="#312e81"/>
+        <text x="225" y="171" text-anchor="middle" font-size="10" font-weight="700" fill="#38bdf8">API: GET /api/v1/ml/rules-search?query=...</text>
+      </g>
+    </g>
+
+    <!-- SECTION 2: DETERMINISTIC METROLOGICAL MATHEMATICAL CORE -->
+    <g transform="translate(35, 290)">
+      <rect x="0" y="0" width="1410" height="340" rx="16" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+      <rect x="20" y="-12" width="480" height="24" rx="12" fill="#0284c7"/>
+      <text x="32" y="4" font-size="11" font-weight="800" fill="#ffffff">📐 DETERMINISTIC MATHEMATICAL CORE (40-DECIMAL EXACT ARITHMETIC)</text>
+
+      <!-- Sub-Box 2.1: Statutory Formulas & Error Theory -->
+      <g transform="translate(25, 25)">
+        <rect x="0" y="0" width="430" height="290" rx="12" fill="#0b1329" stroke="#1e293b" stroke-width="1.2"/>
+        <text x="18" y="28" font-size="14" font-weight="800" fill="#38bdf8">Digital Indication &amp; Error Theory</text>
+        <text x="18" y="48" font-size="11" font-weight="600" fill="#94a3b8">OIML R 76-1:2006 Clause A.4.4.3</text>
+        
+        <rect x="15" y="60" width="400" height="36" rx="6" fill="#1e293b"/>
+        <text x="25" y="83" font-size="13" font-weight="800" fill="#38bdf8">P = I + 0.5d - ΔL</text>
+        <text x="210" y="83" font-size="11" font-weight="500" fill="#94a3b8">(Indication prior to rounding)</text>
+
+        <rect x="15" y="105" width="400" height="36" rx="6" fill="#1e293b"/>
+        <text x="25" y="128" font-size="13" font-weight="800" fill="#f87171">E = P - L</text>
+        <text x="210" y="128" font-size="11" font-weight="500" fill="#94a3b8">(Raw error before correction)</text>
+
+        <rect x="15" y="150" width="400" height="36" rx="6" fill="#1e293b"/>
+        <text x="25" y="173" font-size="13" font-weight="800" fill="#34d399">Ec = E - E0</text>
+        <text x="210" y="173" font-size="11" font-weight="500" fill="#94a3b8">(Corrected error vs zero)</text>
+
+        <text x="18" y="210" font-size="11.5" font-weight="700" fill="#fbbf24">Piecewise Maximum Permissible Error (MPE):</text>
+        <text x="18" y="230" font-size="11" font-weight="500" fill="#cbd5e1">• Class I, II, III, IIII Dynamic Step Functions</text>
+        <text x="18" y="248" font-size="11" font-weight="500" fill="#cbd5e1">• Band 1 [0 ≤ m ≤ m1]: |Ec| ≤ ±0.5e (In-Service: ±1.0e)</text>
+        <text x="18" y="266" font-size="11" font-weight="500" fill="#cbd5e1">• Band 2 [m1 &lt; m ≤ m2]: |Ec| ≤ ±1.0e (In-Service: ±2.0e)</text>
+        <text x="18" y="284" font-size="11" font-weight="500" fill="#cbd5e1">• Band 3 [m2 &lt; m ≤ m3]: |Ec| ≤ ±1.5e (In-Service: ±3.0e)</text>
+      </g>
+
+      <!-- Sub-Box 2.2: 17 Statutory Test Evaluator Suite -->
+      <g transform="translate(480, 25)">
+        <rect x="0" y="0" width="430" height="290" rx="12" fill="#0b1329" stroke="#1e293b" stroke-width="1.2"/>
+        <text x="18" y="28" font-size="14" font-weight="800" fill="#34d399">17 Statutory OIML Test Suites (T1–T15)</text>
+        <text x="18" y="48" font-size="11" font-weight="600" fill="#94a3b8">OIML R 76-2:2007 (E) Formats 1 through 17</text>
+
+        <text x="18" y="74" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#38bdf8">T1:</tspan> Weighing Performance (Normal &amp; Tare)</text>
+        <text x="18" y="94" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#38bdf8">T2:</tspan> Temperature Zero-Stability Differential (Δzero ≤ 1e / 5°C)</text>
+        <text x="18" y="114" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#38bdf8">T3:</tspan> Eccentricity / Corner Loading (4 &amp; 5 Pan Locations)</text>
+        <text x="18" y="134" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#38bdf8">T4:</tspan> Discrimination Threshold (Digital 1.4d / Analog 1d)</text>
+        <text x="18" y="154" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#38bdf8">T5:</tspan> Repeatability Dispersion (Emax - Emin ≤ |MPE|)</text>
+        <text x="18" y="174" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#38bdf8">T6:</tspan> Creep &amp; Zero Return (4-hour relaxation envelope)</text>
+        <text x="18" y="194" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#38bdf8">T7–T9:</tspan> Stability, Tilting (Suspended Scales) &amp; Tare Limits</text>
+        <text x="18" y="214" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#38bdf8">T10–T12:</tspan> Warm-up, Extreme Voltages &amp; Disturbance EMC</text>
+        <text x="18" y="234" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#38bdf8">T13–T15:</tspan> Damp Heat Steady State, Span Drift &amp; Endurance</text>
+
+        <rect x="18" y="250" width="394" height="26" rx="6" fill="#14532d"/>
+        <text x="215" y="267" text-anchor="middle" font-size="11" font-weight="700" fill="#86efac">Monotonic Dominance: PASSED ⇔ All Tests Pass</text>
+      </g>
+
+      <!-- Sub-Box 2.3: 2026 Substitution Optimizer & AST Evaluator -->
+      <g transform="translate(935, 25)">
+        <rect x="0" y="0" width="450" height="290" rx="12" fill="#0b1329" stroke="#1e293b" stroke-width="1.2"/>
+        <text x="18" y="28" font-size="14" font-weight="800" fill="#fbbf24">2026 Standard Weight Substitution Optimizer</text>
+        <text x="18" y="48" font-size="11" font-weight="600" fill="#94a3b8">Fourth Amendment Rules, 2026 / G.S.R. 568(E)</text>
+
+        <rect x="15" y="60" width="420" height="70" rx="8" fill="#1e293b"/>
+        <text x="25" y="80" font-size="11.5" font-weight="700" fill="#fbbf24">Repeatability Dispersion r = Emax - Emin:</text>
+        <text x="25" y="98" font-size="11" font-weight="600" fill="#a7f3d0">• If r ≤ 0.2e ➔ Mandatory Standard Weights: 20% Max</text>
+        <text x="25" y="116" font-size="11" font-weight="600" fill="#fde68a">• If 0.2e &lt; r ≤ 0.3e ➔ Mandatory Standard Weights: 33.3% Max</text>
+
+        <rect x="15" y="138" width="420" height="42" rx="8" fill="#1e293b"/>
+        <text x="25" y="156" font-size="11" font-weight="600" fill="#fca5a5">• If r &gt; 0.3e ➔ Mandatory Standard Weights: 50% Max</text>
+        <text x="25" y="172" font-size="10.5" font-weight="500" fill="#94a3b8">Substitution material: stable, non-porous blocks/ingots</text>
+
+        <text x="18" y="202" font-size="12" font-weight="800" fill="#c084fc">Sandboxed AST Decimal Rule Evaluator:</text>
+        <text x="18" y="222" font-size="11" font-weight="500" fill="#cbd5e1">• Abstract Syntax Tree (ast.parse) sandboxed execution</text>
+        <text x="18" y="240" font-size="11" font-weight="500" fill="#cbd5e1">• Disallows eval() / exec(); prevents code injection</text>
+        <text x="18" y="258" font-size="11" font-weight="500" fill="#cbd5e1">• Decoupled Rulepacks: `oiml-r76-2007`, `india-lm-2011`</text>
+        <text x="18" y="276" font-size="11" font-weight="600" fill="#38bdf8">Exact Statutory Reproducibility &amp; Legal Non-Repudiation</text>
+      </g>
+    </g>
+
+    <!-- SECTION 3: REPORT GENERATION & CRYPTOGRAPHIC VERIFICATION PIPELINE -->
+    <g transform="translate(35, 650)">
+      <rect x="0" y="0" width="1410" height="340" rx="16" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+      <rect x="20" y="-12" width="560" height="24" rx="12" fill="#059669"/>
+      <text x="32" y="4" font-size="11" font-weight="800" fill="#ffffff">📑 TWO-PASS DOCUMENT GENERATION &amp; CRYPTOGRAPHIC VERIFICATION PIPELINE</text>
+
+      <!-- Sub-Box 3.1: Server-Side PDF & DOCX Synthesis -->
+      <g transform="translate(25, 25)">
+        <rect x="0" y="0" width="430" height="290" rx="12" fill="#064e3b" fill-opacity="0.3" stroke="#059669" stroke-width="1.2"/>
+        <text x="18" y="28" font-size="14" font-weight="800" fill="#34d399">Server-Side Report Synthesis</text>
+        <text x="18" y="48" font-size="11" font-weight="600" fill="#94a3b8">ReportLab 5.0 + python-docx Compilers</text>
+        
+        <text x="18" y="74" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#ffffff">• Two-Pass Canvas (OimlNumberedCanvas):</tspan></text>
+        <text x="30" y="92" font-size="10.5" font-weight="500" fill="#a7f3d0">Accurately computes total pages N for "Page X of N"</text>
+        
+        <text x="18" y="116" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#ffffff">• Official 64-Page OIML R 76-2 Dossier:</tspan></text>
+        <text x="30" y="134" font-size="10.5" font-weight="500" fill="#a7f3d0">All Formats 1–17, Section 17 Checklists, Equipment</text>
+
+        <text x="18" y="158" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#ffffff">• Microsoft Word (.docx) Engine:</tspan></text>
+        <text x="30" y="176" font-size="10.5" font-weight="500" fill="#a7f3d0">925-line generator with styled metrology tables &amp; seals</text>
+
+        <text x="18" y="200" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#ffffff">• High-Resolution ReportLab Vector Charts:</tspan></text>
+        <text x="30" y="218" font-size="10.5" font-weight="500" fill="#a7f3d0">Eccentricity Pan Layouts &amp; Error Corridor Envelopes</text>
+
+        <rect x="18" y="240" width="394" height="32" rx="6" fill="#065f46"/>
+        <text x="215" y="260" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">Direct Cloudinary MaaS Upload &amp; Fetching</text>
+      </g>
+
+      <!-- Sub-Box 3.2: Cryptographic Tamper-Evidence & Hash Chains -->
+      <g transform="translate(480, 25)">
+        <rect x="0" y="0" width="430" height="290" rx="12" fill="#1e1b4b" fill-opacity="0.3" stroke="#6366f1" stroke-width="1.2"/>
+        <text x="18" y="28" font-size="14" font-weight="800" fill="#818cf8">Cryptographic Proof &amp; Audit Chains</text>
+        <text x="18" y="48" font-size="11" font-weight="600" fill="#94a3b8">SHA-256 Non-Repudiation Architecture</text>
+
+        <rect x="15" y="60" width="400" height="52" rx="6" fill="#1e293b"/>
+        <text x="25" y="80" font-size="11.5" font-weight="800" fill="#c084fc">Immutable Hash Chain:</text>
+        <text x="25" y="100" font-size="10" font-weight="600" fill="#cbd5e1">H_n = SHA-256(H_{n-1} ∥ seq ∥ ts ∥ user ∥ action ∥ data)</text>
+
+        <text x="18" y="132" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#38bdf8">• PDF Byte-Level Digest:</tspan> SHA-256 fingerprint generated</text>
+        <text x="18" y="152" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#38bdf8">• Zero-Alteration Guarantee:</tspan> Modifying 1 byte breaks hash</text>
+        <text x="18" y="172" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#38bdf8">• Relational Audit Trail:</tspan> Tracks technician, timestamp, edit</text>
+        <text x="18" y="192" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#38bdf8">• Regulatory Non-Repudiation:</tspan> Admissible in court</text>
+
+        <rect x="18" y="225" width="394" height="48" rx="6" fill="#312e81"/>
+        <text x="215" y="244" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">Tamper-Proof Verification Portal</text>
+        <text x="215" y="260" text-anchor="middle" font-size="10" font-weight="500" fill="#a5b4fc">Client Drag-and-Drop Hash Validation (Verify.tsx)</text>
+      </g>
+
+      <!-- Sub-Box 3.3: Dynamic QR Code Verification Seal -->
+      <g transform="translate(935, 25)">
+        <rect x="0" y="0" width="450" height="290" rx="12" fill="#78350f" fill-opacity="0.2" stroke="#d97706" stroke-width="1.2"/>
+        <text x="18" y="28" font-size="14" font-weight="800" fill="#fbbf24">Dynamic QR Verification Seal</text>
+        <text x="18" y="48" font-size="11" font-weight="600" fill="#94a3b8">Instant Field Inspector Authentication</text>
+
+        <rect x="25" y="65" width="80" height="80" rx="8" fill="#ffffff" filter="url(#shadowBox)"/>
+        <!-- QR Code Grid Mockup -->
+        <rect x="33" y="73" width="24" height="24" fill="#000000"/>
+        <rect x="37" y="77" width="16" height="16" fill="#ffffff"/>
+        <rect x="41" y="81" width="8" height="8" fill="#000000"/>
+        
+        <rect x="73" y="73" width="24" height="24" fill="#000000"/>
+        <rect x="77" y="77" width="16" height="16" fill="#ffffff"/>
+        <rect x="81" y="81" width="8" height="8" fill="#000000"/>
+
+        <rect x="33" y="113" width="24" height="24" fill="#000000"/>
+        <rect x="37" y="117" width="16" height="16" fill="#ffffff"/>
+        <rect x="41" y="121" width="8" height="8" fill="#000000"/>
+
+        <text x="120" y="85" font-size="12" font-weight="800" fill="#ffffff">Embedded Payload:</text>
+        <text x="120" y="103" font-size="10.5" font-weight="500" fill="#cbd5e1">• Unique Verification ID</text>
+        <text x="120" y="121" font-size="10.5" font-weight="500" fill="#cbd5e1">• Instrument Serial &amp; Class</text>
+        <text x="120" y="139" font-size="10.5" font-weight="500" fill="#38bdf8">• Direct Verification URL</text>
+
+        <text x="18" y="172" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#fbbf24">• On-Pan Physical Stamping:</tspan> Officers scan QR with mobile</text>
+        <text x="18" y="192" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#fbbf24">• Instant Statutory Verdict:</tspan> Shows PASSED / VALID status</text>
+        <text x="18" y="212" font-size="11" font-weight="500" fill="#cbd5e1"><tspan font-weight="700" fill="#fbbf24">• Certificate Re-Download:</tspan> Directly streams from Cloudinary</text>
+
+        <rect x="18" y="235" width="414" height="38" rx="6" fill="#92400e"/>
+        <text x="225" y="258" text-anchor="middle" font-size="11" font-weight="800" fill="#ffffff">Real-time Trust &amp; National Consumer Protection</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ==================== FLOW CONNECTIONS & DATA ARROWS ==================== -->
+
+  <!-- Flow 1: Users/Dashboard -> Batch Excel Upload -> Cloudinary MaaS -->
+  <path d="M 535 385 C 600 385, 750 250, 980 200" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arrowOrange)"/>
+  <rect x="680" y="275" width="190" height="24" rx="6" fill="#1e293b" stroke="#f59e0b" stroke-width="1"/>
+  <text x="775" y="291" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fbbf24">1. Excel &amp; Evidence Upload</text>
+
+  <!-- Flow 2: Cloudinary -> Schedules/Data Retrieval -> Server -->
+  <path d="M 1240 245 C 1240 370, 600 450, 560 525" fill="none" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrowCyan)"/>
+  <rect x="910" y="430" width="190" height="24" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <text x="1005" y="446" text-anchor="middle" font-size="10.5" font-weight="700" fill="#38bdf8">2. Data &amp; Template Retrieval</text>
+
+  <!-- Flow 3: Dashboard -> API Calls / Sessions -> Server -->
+  <path d="M 340 490 L 340 525" fill="none" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrowCyan)"/>
+  <rect x="250" y="495" width="180" height="22" rx="5" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+  <text x="340" y="510" text-anchor="middle" font-size="10" font-weight="700" fill="#38bdf8">3. REST API &amp; Auth Tokens</text>
+
+  <!-- Flow 4: AWS Cloud Infrastructure <-> Backend Server -->
+  <path d="M 800 475 L 800 525" fill="none" stroke="#f97316" stroke-width="2.5" marker-end="url(#arrowOrange)"/>
+  <rect x="730" y="490" width="140" height="22" rx="5" fill="#0f172a" stroke="#f97316" stroke-width="1"/>
+  <text x="800" y="505" text-anchor="middle" font-size="10" font-weight="700" fill="#fdba74">AWS Orchestration</text>
+
+  <!-- Flow 5: Server -> Dispatches Calculation & ML Pipeline into Engine -->
+  <path d="M 550 760 L 550 800" fill="none" stroke="#10b981" stroke-width="3" marker-end="url(#arrowEmerald)"/>
+  <rect x="420" y="768" width="260" height="22" rx="5" fill="#0f172a" stroke="#10b981" stroke-width="1"/>
+  <text x="550" y="783" text-anchor="middle" font-size="10.5" font-weight="800" fill="#34d399">4. Ingested Data Extraction &amp; Pipeline Execution</text>
+
+  <!-- Flow 6: Engine -> Generates Certified Dossier -> Cloudinary Storage -->
+  <path d="M 1445 800 C 1470 650, 1470 380, 1370 245" fill="none" stroke="#c084fc" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arrowPurple)"/>
+  <rect x="1340" y="500" width="210" height="24" rx="6" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+  <text x="1445" y="516" text-anchor="middle" font-size="10.5" font-weight="700" fill="#e9d5ff">5. Certified PDF/DOCX Export</text>
+
+  <!-- Flow 7: Server -> Return Generated Verdict & Live Error Envelope to Dashboard -->
+  <path d="M 200 525 L 200 490" fill="none" stroke="#10b981" stroke-width="2.5" marker-end="url(#arrowEmerald)"/>
+  <rect x="100" y="495" width="190" height="22" rx="5" fill="#0f172a" stroke="#10b981" stroke-width="1"/>
+  <text x="195" y="510" text-anchor="middle" font-size="10" font-weight="700" fill="#34d399">6. Generated Verdict &amp; Charts</text>
+
+  <!-- ==================== FOOTER ==================== -->
+  <g id="footerSection" transform="translate(60, 1840)">
+    <line x1="0" y1="0" x2="1480" y2="0" stroke="#334155" stroke-width="1"/>
+    <text x="0" y="24" font-size="11" font-weight="600" fill="#64748b">MetroCert Architecture Specification · Smart India Hackathon 2026 · Ministry of Consumer Affairs (Legal Metrology Division)</text>
+    <text x="1480" y="24" text-anchor="end" font-size="11" font-weight="700" fill="#38bdf8">Vercel (Frontend) · Render/Railway (Backend) · Cloudinary (MaaS) · AWS (Cloud Infrastructure)</text>
+  </g>
+</svg>
